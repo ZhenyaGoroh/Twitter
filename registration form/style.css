@@ -1,0 +1,134 @@
+:root {
+    --small-fs: 0.575rem;
+    --medium-fs: 0.71rem;
+  
+    --input-color: rgba(240, 238, 255, 1);
+  }
+  
+  html,
+  body {
+    font-family: "Roboto", sans-serif;
+    font-size: 21px;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  input:focus {
+    outline: none;
+  }
+  .container {
+    width: 56.9rem;
+    margin: 0 auto;
+  }
+  
+  /* --------------HEADER----------------------- */
+  header {
+    border-bottom: 1px solid rgba(240, 238, 255, 1);
+    height: 3.62rem;
+  }
+  
+  .header__container {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding-left: 15px;
+  }
+  .header__breadcrumbs {
+    font-size: var(--small-fs);
+    display: flex;
+    margin-left: 3rem;
+    font-weight: 700;
+    gap: 0.76rem;
+    align-items: center;
+  }
+  
+  .header__breadcrumbs_home {
+    color: rgba(0, 0, 0, 0.65);
+  }
+  
+  /* -------------------------main------------------ */
+  
+  main {
+    display: flex;
+  }
+  
+  .main__blue-screen {
+    background: url(/img/blue-screen.jpg) no-repeat;
+    width: 41.5rem;
+    height: 35.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: 800;
+    font-size: 3.3rem;
+    text-transform: uppercase;
+  }
+  
+  /* -------------------registration form---------------------- */
+  .main__registration-form {
+    margin-top: 4rem;
+    margin-left: 2.8rem;
+  }
+  .registration-form {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+  .registration-form__title {
+    font-size: 3rem;
+    font-weight: 700;
+  }
+  .registration-form__inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .registration-form__input {
+    color: rgba(133, 133, 133, 1);
+    border: 1px solid rgba(83, 100, 113, 1);
+    border-radius: 20px;
+    padding: 0.8rem;
+  }
+  
+  .registration-form__btn {
+    border: 1px solid rgba(83, 100, 113, 1);
+    border-radius: 50px;
+    color: rgba(29, 155, 240, 1);
+    background: none;
+    padding: 0.4rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  
+  .registration-form__btn:hover {
+    background: rgba(240, 238, 255, 1);
+  }
+  .registration-form__footer {
+      display: flex;
+      gap: 4px;
+  
+  }
+  
+  .registration-form__footer_secondary-text {
+      color: 
+      rgba(29, 155, 240, 1);
+  }
+  /* ----------------------FOOTER----------------------------- */
+  
+  footer {
+    width: 100%;
+    color: rgba(133, 133, 133, 1);
+    font-size: var(--medium-fs);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    height: 3rem;
+  }
+  
