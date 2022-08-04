@@ -12,12 +12,26 @@
       rel="stylesheet"
     />
     <!-- -----------------RESET------------------------ -->
-    <link rel="stylesheet" href="/reset.css" />
+    <link rel="stylesheet" href="/style/reset.css" />
     <!-- -----------------CSS------------------------ -->
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="/style/style.css" />
     <title>Tile</title>
   </head>
   <body>
+    <!-- ============================= SVG SPRITES ============================= -->
+
+    <svg display="none">
+      <!-- message-icon -->
+      <symbol id="message" viewBox="0 0 24 24">
+        <path
+          d="M5.2 22c-.4 0-.9-.1-1.3-.2s-.6-.3-.8-.5l-.1-.1c-.1-.1-.2-.3-.2-.4 0-.2.1-.3.3-.4.8-.4 1.5-1.1 1.9-1.9 0-.1 0-.2.1-.3C2.3 16.5.7 13.8.7 11 .6 6 5.7 2 12 2c6.3 0 11.4 4 11.4 9s-5.1 9.1-11.4 9.1c-.6 0-1.3 0-1.9-.1-1.5 1.3-3.2 2-4.9 2zm-1-1.1c1.7.4 3.7-.3 5.5-1.8 0-.1.2-.2.3-.1.6.1 1.3.1 2 .1 5.7 0 10.4-3.6 10.4-8.1S17.7 3 12 3 1.6 6.6 1.6 11c0 2.6 1.6 5 4.3 6.5.2.1.3.4.2.6 0 .3-.1.6-.3.9-.4.8-1 1.4-1.6 1.9z"
+        />
+      </symbol>
+      <!-- breadcrumbs-icon -->
+      <symbol id="breadcrumbs-icon" viewBox="0 0 23 20">
+        <path d="M5.80988 6H17.0423L11.4261 15L5.80988 6Z" fill="#858585"/>
+      </symbol>
+    </svg>
     <!-- -----------------HEADER------------------------ -->
     <header>
       <div class="container header__container">
@@ -25,7 +39,7 @@
           ><img src="/img/logo.svg" alt="Logo" class="header__logo"
         /></a>
         <div class="header__breadcrumbs">
-          <span class="header__breadcrumbs_home">Home</span>
+          <span>Home</span>
         </div>
         <button class="primary-btn header__btn">Log in</button>
       </div>
@@ -34,7 +48,7 @@
     <!-- --------------------MAIN---------------------------- -->
     <!-- --------------------NEW TWEET----------------------- -->
     <div class="container__flex">
-      <main>
+      <main class="main__new-tweet_container">
         <div class="main__new-tweet">
           <div class="new-tweet__header">
             <div class="user-icon__container">
@@ -70,17 +84,8 @@
                 «в форме хвоста только что показавшегося из воды кита».
               </div>
               <div class="tweet__text_footer">
-                <svg
-
-                  fill="rgba(133, 133, 133, 1)"
-                  class="tweet__message_icon"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                >
-                  <path
-                    d="M5.2 22c-.4 0-.9-.1-1.3-.2s-.6-.3-.8-.5l-.1-.1c-.1-.1-.2-.3-.2-.4 0-.2.1-.3.3-.4.8-.4 1.5-1.1 1.9-1.9 0-.1 0-.2.1-.3C2.3 16.5.7 13.8.7 11 .6 6 5.7 2 12 2c6.3 0 11.4 4 11.4 9s-5.1 9.1-11.4 9.1c-.6 0-1.3 0-1.9-.1-1.5 1.3-3.2 2-4.9 2zm-1-1.1c1.7.4 3.7-.3 5.5-1.8 0-.1.2-.2.3-.1.6.1 1.3.1 2 .1 5.7 0 10.4-3.6 10.4-8.1S17.7 3 12 3 1.6 6.6 1.6 11c0 2.6 1.6 5 4.3 6.5.2.1.3.4.2.6 0 .3-.1.6-.3.9-.4.8-1 1.4-1.6 1.9z"
-                  />
+                <svg class="tweet__message_icon">
+                  <use xlink:href="#message"></use>
                 </svg>
 
                 <span class="tweet__message_count">0</span>
@@ -108,17 +113,8 @@
                 что показавшегося из воды кита».
               </div>
               <div class="tweet__text_footer">
-                <svg
-                  
-                  fill="rgba(133, 133, 133, 1)"
-                  class="tweet__message_icon"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                >
-                  <path
-                    d="M5.2 22c-.4 0-.9-.1-1.3-.2s-.6-.3-.8-.5l-.1-.1c-.1-.1-.2-.3-.2-.4 0-.2.1-.3.3-.4.8-.4 1.5-1.1 1.9-1.9 0-.1 0-.2.1-.3C2.3 16.5.7 13.8.7 11 .6 6 5.7 2 12 2c6.3 0 11.4 4 11.4 9s-5.1 9.1-11.4 9.1c-.6 0-1.3 0-1.9-.1-1.5 1.3-3.2 2-4.9 2zm-1-1.1c1.7.4 3.7-.3 5.5-1.8 0-.1.2-.2.3-.1.6.1 1.3.1 2 .1 5.7 0 10.4-3.6 10.4-8.1S17.7 3 12 3 1.6 6.6 1.6 11c0 2.6 1.6 5 4.3 6.5.2.1.3.4.2.6 0 .3-.1.6-.3.9-.4.8-1 1.4-1.6 1.9z"
-                  />
+                <svg class="tweet__message_icon">
+                  <use xlink:href="#message"></use>
                 </svg>
                 <span class="tweet__message_count">0</span>
               </div>

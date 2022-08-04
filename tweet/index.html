@@ -5,9 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- ----------------STYLE------------------------- -->
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="/style/style.css" />
     <!-- ---------------RESET------------------ -->
-    <link rel="stylesheet" href="/reset.css" />
+    <link rel="stylesheet" href="/style/reset.css" />
     <!-- -----------------GOOGLE FONTS------------------------ -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -18,6 +18,20 @@
     <title>Tile</title>
   </head>
   <body>
+    <!-- ============================= SVG SPRITES ============================= -->
+
+    <svg display="none">
+      <!-- message-icon -->
+      <symbol id="message" viewBox="0 0 24 24">
+        <path
+          d="M5.2 22c-.4 0-.9-.1-1.3-.2s-.6-.3-.8-.5l-.1-.1c-.1-.1-.2-.3-.2-.4 0-.2.1-.3.3-.4.8-.4 1.5-1.1 1.9-1.9 0-.1 0-.2.1-.3C2.3 16.5.7 13.8.7 11 .6 6 5.7 2 12 2c6.3 0 11.4 4 11.4 9s-5.1 9.1-11.4 9.1c-.6 0-1.3 0-1.9-.1-1.5 1.3-3.2 2-4.9 2zm-1-1.1c1.7.4 3.7-.3 5.5-1.8 0-.1.2-.2.3-.1.6.1 1.3.1 2 .1 5.7 0 10.4-3.6 10.4-8.1S17.7 3 12 3 1.6 6.6 1.6 11c0 2.6 1.6 5 4.3 6.5.2.1.3.4.2.6 0 .3-.1.6-.3.9-.4.8-1 1.4-1.6 1.9z"
+        />
+      </symbol>
+      <!-- breadcrumbs-icon -->
+      <symbol id="breadcrumbs-icon" viewBox="0 0 8 14">
+        <path d="M5.17198 6.99999L0.221985 2.04999L1.63598 0.635986L7.99998 6.99999L1.63598 13.364L0.221985 11.95L5.17198 6.99999Z"/>
+      </symbol>
+    </svg>
     <!-- -----------------HEADER------------------------ -->
     <header>
       <div class="container header__container">
@@ -25,13 +39,10 @@
           ><img src="/img/logo.svg" alt="Logo" class="header__logo"
         /></a>
         <div class="header__breadcrumbs">
-          <span class="header__breadcrumbs_home">Home</span>
-          <span
-            class="iconify"
-            data-icon="ri:arrow-right-s-line"
-            data-width="24"
-            data-height="24"
-          ></span>
+          <span class="previous-page">Home</span>
+          <svg class="header__breadcrumbs-icon">
+            <use xlink:href="#breadcrumbs-icon"></use>
+          </svg>
           <span class="header__breadcrumbs_tweet">Tweet</span>
         </div>
         <button class="primary-btn header__btn">Log in</button>
@@ -40,7 +51,7 @@
 
     <!-- --------------------MAIN------------------ -->
 
-    <main>
+    <main class="main__comments_container">
       <!-- ======================TWEET========================= -->
       <div class="main__tweet">
         <div class="tweet__container">
@@ -50,7 +61,7 @@
           <div class="tweet__text">
             <div class="tweet__text_header">
               <span class="text__header_user-name">Zhenya Goroh</span>
-              <img src="/img/Dot.svg" />
+              <div class="text__header_dot"><img src="/img/Dot.svg" /></div>
               <div class="text__header_date">
                 <span class="text__header_date-month">31 July</span>
                 <span class="text__header_date-time">15:00</span>
@@ -61,16 +72,8 @@
               форме хвоста только что показавшегося из воды кита».
             </div>
             <div class="tweet__text_footer">
-              <svg
-                fill="rgba(133, 133, 133, 1)"
-                class="tweet__message_icon"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-              >
-                <path
-                  d="M5.2 22c-.4 0-.9-.1-1.3-.2s-.6-.3-.8-.5l-.1-.1c-.1-.1-.2-.3-.2-.4 0-.2.1-.3.3-.4.8-.4 1.5-1.1 1.9-1.9 0-.1 0-.2.1-.3C2.3 16.5.7 13.8.7 11 .6 6 5.7 2 12 2c6.3 0 11.4 4 11.4 9s-5.1 9.1-11.4 9.1c-.6 0-1.3 0-1.9-.1-1.5 1.3-3.2 2-4.9 2zm-1-1.1c1.7.4 3.7-.3 5.5-1.8 0-.1.2-.2.3-.1.6.1 1.3.1 2 .1 5.7 0 10.4-3.6 10.4-8.1S17.7 3 12 3 1.6 6.6 1.6 11c0 2.6 1.6 5 4.3 6.5.2.1.3.4.2.6 0 .3-.1.6-.3.9-.4.8-1 1.4-1.6 1.9z"
-                />
+              <svg class="tweet__message_icon">
+                <use xlink:href="#message"></use>
               </svg>
 
               <span class="tweet__message_count">3</span>
@@ -151,7 +154,6 @@
       </div>
     </main>
     <!-- -----------------------------FOOTER---------------------------- -->
-    <!-- TODO:FOOTER MARGIN -->
     <footer>
       <span>Tale</span>
       <span>Zhenya Goroh</span>
