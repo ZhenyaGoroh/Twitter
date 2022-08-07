@@ -1,5 +1,3 @@
-
-
 const tweets = [
   {
     id: "1",
@@ -190,3 +188,39 @@ const tweets = [
     comments: [],
   },
 ];
+let user;
+
+// FIXME:hashtags
+function getTweets(skip = 0, top = 10, filterConfig) {
+  if (typeof skip === "object") {
+    filterConfig = skip;
+    skip = 0;
+  }
+  let getTweetsArr = tweets
+    .slice(skip, skip + top)
+    .sort((a, b) => a.createdAt - b.createdAt);
+  if (filterConfig === undefined) {
+    return getTweetsArr;
+  } else {
+    let res = [];
+    for (let tweet of getTweetsArr) {
+      let counter = 0;
+      for (let i = 0; i < Object.values(filterConfig).length; i++) {
+        if (
+          tweet[Object.keys(filterConfig)[i]].includes(
+            Object.values(filterConfig)[i]
+          )
+        )
+          counter++;
+      }
+      if (counter == Object.keys(filterConfig).length) res.push(tweet);
+    }
+    return res;
+  }
+}
+
+function getTweet(id) {
+  return tweets.filter((tweet) => tweet.id == id);
+}
+
+console.log(getTweets(3,15,{text:"Если"}));
