@@ -293,3 +293,26 @@ function validateComment(com){
   return false;
 }
 
+function addComment(id,text){
+  if (typeof text === "string" && text.length <= 280) {
+    let comment = {
+      id:String(
+        parseInt(new Date().toString().slice(7, 25).replace(/[^\d]/g, ""))
+      ),
+      text:text,
+      createdAt:new Date(),
+      author:user,
+    }
+    for(let tweet of tweets){
+      if(tweet.id===id){
+        tweet.comments.push(comment)
+        return true;
+        break
+      }
+    }
+  }return false
+}
+
+
+
+
