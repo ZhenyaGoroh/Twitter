@@ -257,25 +257,39 @@ function addTweet(text) {
 function editTweet(id, text) {
   if (typeof text === "string" && text.length <= 280) {
     for (let tweet of tweets) {
-      if (tweet.id == id && tweet.author == user) {
+      if (tweet.id === id && tweet.author === user) {
         tweet.text = text;
-        return true
-        break
+        return true;
+        break;
       }
-
     }
-  }return false
+  }
+  return false;
 }
 
-function removeTweet(id){
-  for(let tweet of tweets){
-    if(tweet.id==id&&tweet.author==user){
-      tweets.splice(tweets.indexOf(tweet),1);
+function removeTweet(id) {
+  for (let tweet of tweets) {
+    if (tweet.id === id && tweet.author === user) {
+      tweets.splice(tweets.indexOf(tweet), 1);
       return true;
       break;
     }
-  }return false
+  }
+  return false;
 }
 
 
-console.log(removeTweet(1))
+function validateComment(com){
+  if (
+    typeof com.id === "string" &&
+    typeof com.text === "string" &&
+    com.text.length <= 280 &&
+    Object.prototype.toString.call(com.createdAt) === "[object Date]" &&
+    com.createdAt != "Invalid Date" &&
+    typeof com.author === "string" 
+  ) {
+    return true;
+  }
+  return false;
+}
+
