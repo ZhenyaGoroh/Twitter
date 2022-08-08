@@ -3,7 +3,7 @@ const tweets = [
     id: "1",
     text: "Привет!",
     createdAt: new Date("2022-03-09T23:00:00"),
-    author: "Иванов Иван",
+    author: "Zhenya",
     comments: [],
   },
   {
@@ -188,7 +188,7 @@ const tweets = [
     comments: [],
   },
 ];
-let user="Zhenya";
+let user = "Zhenya";
 
 function getTweets(skip = 0, top = 10, filterConfig) {
   if (typeof skip === "object") {
@@ -244,14 +244,27 @@ function addTweet(text) {
       id: String(
         parseInt(new Date().toString().slice(7, 25).replace(/[^\d]/g, ""))
       ),
-      text:text,
-      createdAt:new Date(),
-      author:user,
-      comments:[],
+      text: text,
+      createdAt: new Date(),
+      author: user,
+      comments: [],
     });
+    return true;
   }
-  return tweets[tweets.length - 1];
+  return false;
 }
 
-console.log(addTweet("hi #js"));
-console.log(getTweets({text:"#js"}))
+function editTweet(id, text) {
+  if (typeof text === "string" && text.length <= 280) {
+    for (let tweet of tweets) {
+      if (tweet.id == id && tweet.author == user) {
+        tweet.text = text;
+        return true
+        break
+      }
+
+    }
+  }return false
+}
+
+
