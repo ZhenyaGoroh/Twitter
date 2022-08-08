@@ -196,14 +196,13 @@ function getTweets(skip = 0, top = 10, filterConfig) {
     filterConfig = skip;
     skip = 0;
   }
-  let getTweetsArr = tweets
-    .slice(skip, skip + top)
-    .sort((a, b) => a.createdAt - b.createdAt);
   if (filterConfig === undefined) {
-    return getTweetsArr;
+    return tweets
+      .slice(skip, skip + top)
+      .sort((a, b) => a.createdAt - b.createdAt);
   } else {
     let res = [];
-    for (let tweet of getTweetsArr) {
+    for (let tweet of tweets) {
       let counter = 0;
       for (let i = 0; i < Object.values(filterConfig).length; i++) {
         if (
@@ -215,7 +214,9 @@ function getTweets(skip = 0, top = 10, filterConfig) {
       }
       if (counter == Object.keys(filterConfig).length) res.push(tweet);
     }
-    return res;
+    return res
+      .slice(skip, skip + top)
+      .sort((a, b) => a.createdAt - b.createdAt);
   }
 }
 
@@ -223,4 +224,34 @@ function getTweet(id) {
   return tweets.filter((tweet) => tweet.id == id);
 }
 
-console.log(getTweets(3,15,{text:"Если"}));
+function validateTweet(tweet) {
+  if (
+    typeof tweet.id === "string" &&
+    typeof tweet.text === "string" &&
+    tweet.text.length <= 280 &&
+    Object.prototype.toString.call(tweet.createdAt) === "[object Date]" &&
+    tweet.createdAt != "Invalid Date" &&
+    typeof tweet.author === "string" &&
+    Array.isArray(tweet.comments)
+  ) {
+    return true;
+  }
+  return false;
+}
+
+console.log(
+  validateTweet({
+    id: "2",
+    text: "Как дела?",
+    createdAt: new Date("2022-03-09T23:00:01"),
+    author: "Петров Петр",
+    comments: [
+      {
+        id: "21",
+        text: "Хорошо, а у тебя?",
+        createdAt: new Date("2022-03-09T23:00:05"),
+        author: "Иванов Иван",
+      },
+    ],
+  })
+);
