@@ -267,4 +267,15 @@ function editTweet(id, text) {
   }return false
 }
 
+function removeTweet(id){
+  for(let tweet of tweets){
+    if(tweet.id==id&&tweet.author==user){
+      tweets.splice(tweets.indexOf(tweet),1);
+      return true;
+      break;
+    }
+  }return false
+}
 
+
+console.log(removeTweet(1))
