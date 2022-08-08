@@ -313,6 +313,9 @@ function addComment(id,text){
   }return false
 }
 
+function changeUser(usr){
+  return typeof(usr)==="string"?user=usr:false
+}
 
 
 
