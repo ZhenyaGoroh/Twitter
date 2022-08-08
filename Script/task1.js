@@ -43,7 +43,7 @@ const tweets = [
   },
   {
     id: "5",
-    text: "Если смогу, я сделаю это. Конец истории.",
+    text: "Если смогу, я сделаю это. Конец истории. #js",
     createdAt: new Date("2022-03-09T23:20:00"),
     author: "Алексеева Полина",
     comments: [],
@@ -188,9 +188,8 @@ const tweets = [
     comments: [],
   },
 ];
-let user;
+let user="Zhenya";
 
-// FIXME:hashtags
 function getTweets(skip = 0, top = 10, filterConfig) {
   if (typeof skip === "object") {
     filterConfig = skip;
@@ -239,19 +238,20 @@ function validateTweet(tweet) {
   return false;
 }
 
-console.log(
-  validateTweet({
-    id: "2",
-    text: "Как дела?",
-    createdAt: new Date("2022-03-09T23:00:01"),
-    author: "Петров Петр",
-    comments: [
-      {
-        id: "21",
-        text: "Хорошо, а у тебя?",
-        createdAt: new Date("2022-03-09T23:00:05"),
-        author: "Иванов Иван",
-      },
-    ],
-  })
-);
+function addTweet(text) {
+  if (typeof text === "string" && text.length <= 280) {
+    tweets.push({
+      id: String(
+        parseInt(new Date().toString().slice(7, 25).replace(/[^\d]/g, ""))
+      ),
+      text:text,
+      createdAt:new Date(),
+      author:user,
+      comments:[],
+    });
+  }
+  return tweets[tweets.length - 1];
+}
+
+console.log(addTweet("hi #js"));
+console.log(getTweets({text:"#js"}))
