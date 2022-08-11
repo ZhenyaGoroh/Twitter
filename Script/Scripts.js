@@ -122,7 +122,7 @@ const tweets = [
     id: "14",
     text: "Если смогу, я сделаю это. Конец истории.",
     createdAt: new Date("2022-03-09T23:10:00"),
-    author: "Андреев Давид",
+    author: "Никита",
     comments: [],
   },
   {
@@ -188,134 +188,122 @@ const tweets = [
     comments: [],
   },
 ];
+
 let user = "Zhenya";
 
-function getTweets(skip = 0, top = 10, filterConfig) {
-  if (typeof skip === "object") {
-    filterConfig = skip;
-    skip = 0;
-  }
-  if (filterConfig === undefined) {
-    return tweets
+function getTweets(skip = 0, top = 10, filterConfig = {}) {
+  return (
+    tweets
+      // поиск по автору
+      .filter(
+        (tweet) =>
+          !filterConfig.author ||
+          tweet.author.toLowerCase().includes(filterConfig.author.toLowerCase())
+      ) //поиск по тексту
+      .filter(
+        (tweet) =>
+          !filterConfig.text ||
+          tweet.text.toLowerCase().includes(filterConfig.text?.toLowerCase())
+      ) //поиск по дате "c"
+      .filter(
+        (tweet) =>
+          !filterConfig.dateFrom ||
+          new Date(tweet.createdAt) >= new Date(filterConfig.dateFrom)
+      ) //поиск по дате "до"
+      .filter(
+        (tweet) =>
+          !filterConfig.dateTo ||
+          new Date(tweet.createdAt) <= new Date(filterConfig.dateTo)
+      )
       .slice(skip, skip + top)
-      .sort((a, b) => a.createdAt - b.createdAt);
-  } else {
-    let res = [];
-    for (let tweet of tweets) {
-      let counter = 0;
-      for (let i = 0; i < Object.values(filterConfig).length; i++) {
-        if (
-          tweet[Object.keys(filterConfig)[i]].includes(
-            Object.values(filterConfig)[i]
-          )
-        )
-          counter++;
-      }
-      if (counter == Object.keys(filterConfig).length) res.push(tweet);
-    }
-    return res
-      .slice(skip, skip + top)
-      .sort((a, b) => a.createdAt - b.createdAt);
-  }
+  );
 }
 
 function getTweet(id) {
-  return tweets.filter((tweet) => tweet.id == id);
+  return tweets.find((tweet) => tweet.id === id);
 }
 
 function validateTweet(tweet) {
-  if (
+  return (
     typeof tweet.id === "string" &&
     typeof tweet.text === "string" &&
     tweet.text.length <= 280 &&
-    Object.prototype.toString.call(tweet.createdAt) === "[object Date]" &&
-    tweet.createdAt != "Invalid Date" &&
+    tweet.createdAt instanceof Date &&
     typeof tweet.author === "string" &&
     Array.isArray(tweet.comments)
-  ) {
-    return true;
-  }
-  return false;
+  );
 }
 
 function addTweet(text) {
-  if (typeof text === "string" && text.length <= 280) {
-    tweets.push({
+  if (typeof text !== "string" || text.length > 280) return false;
+  const tweet = {
+    id: String(
+      parseInt(new Date().toString().slice(7, 25).replace(/[^\d]/g, ""))
+    ),
+    text: text,
+    createdAt: new Date(),
+    author: user,
+    comments: [],
+  };
+  if (validateTweet(tweet)) {
+    tweets.push(tweet);
+    return true;
+  }
+
+  return false;
+}
+
+function editTweet(id, text) {
+  if (
+    typeof text !== "string" ||
+    text.length > 280 ||
+    getTweet(id).author !== user
+  )
+    return false;
+
+  getTweet(id).text = text;
+  return true;
+}
+
+
+function removeTweet(id) {
+  if (getTweet(id).author !== user) return false;
+  tweets.splice(tweets.indexOf(getTweet(id)), 1);
+  return true;
+}
+
+
+function validateComment(com) {
+  return(
+    typeof com.id === "string" &&
+    typeof com.text === "string" &&
+    com.text.length <= 280 &&
+    com.createdAt instanceof Date &&
+    typeof com.author === "string"
+  ) 
+}
+
+function addComment(id, text) {
+  if (typeof text !== "string" && text.length > 280) return false 
+    const comment = {
       id: String(
         parseInt(new Date().toString().slice(7, 25).replace(/[^\d]/g, ""))
       ),
       text: text,
       createdAt: new Date(),
       author: user,
-      comments: [],
-    });
+    };
+   if(validateComment(comment)){
+    getTweet(id).comments.push(comment);
     return true;
-  }
-  return false;
-}
-
-function editTweet(id, text) {
-  if (typeof text === "string" && text.length <= 280) {
-    for (let tweet of tweets) {
-      if (tweet.id === id && tweet.author === user) {
-        tweet.text = text;
-        return true;
-        break;
-      }
-    }
-  }
-  return false;
-}
-
-function removeTweet(id) {
-  for (let tweet of tweets) {
-    if (tweet.id === id && tweet.author === user) {
-      tweets.splice(tweets.indexOf(tweet), 1);
-      return true;
-      break;
-    }
-  }
-  return false;
+   }
+   return false
 }
 
 
-function validateComment(com){
-  if (
-    typeof com.id === "string" &&
-    typeof com.text === "string" &&
-    com.text.length <= 280 &&
-    Object.prototype.toString.call(com.createdAt) === "[object Date]" &&
-    com.createdAt != "Invalid Date" &&
-    typeof com.author === "string" 
-  ) {
-    return true;
-  }
-  return false;
-}
 
-function addComment(id,text){
-  if (typeof text === "string" && text.length <= 280) {
-    let comment = {
-      id:String(
-        parseInt(new Date().toString().slice(7, 25).replace(/[^\d]/g, ""))
-      ),
-      text:text,
-      createdAt:new Date(),
-      author:user,
-    }
-    for(let tweet of tweets){
-      if(tweet.id===id){
-        tweet.comments.push(comment)
-        return true;
-        break
-      }
-    }
-  }return false
+function changeUser(usr) {
+  return typeof usr === "string" ? (user = usr) : false;
 }
-
-function changeUser(usr){
-  return typeof(usr)==="string"?user=usr:false
-}
-
 
 
