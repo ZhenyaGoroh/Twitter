@@ -12,18 +12,34 @@
       rel="stylesheet"
     />
     <!-- -----------------RESET------------------------ -->
-    <link rel="stylesheet" href="/reset.css" />
+    <link rel="stylesheet" href="/style/reset.css" />
     <!-- -----------------CSS------------------------ -->
-    <link rel="stylesheet" href="style.css" />
-    <title>Twitter</title>
+    <link rel="stylesheet" href="/style/style.css" />
+    <title>Tile</title>
   </head>
   <body>
+    <!-- ============================= SVG SPRITES ============================= -->
+
+    <svg display="none">
+      <!-- message-icon -->
+      <symbol id="message" viewBox="0 0 24 24">
+        <path
+          d="M5.2 22c-.4 0-.9-.1-1.3-.2s-.6-.3-.8-.5l-.1-.1c-.1-.1-.2-.3-.2-.4 0-.2.1-.3.3-.4.8-.4 1.5-1.1 1.9-1.9 0-.1 0-.2.1-.3C2.3 16.5.7 13.8.7 11 .6 6 5.7 2 12 2c6.3 0 11.4 4 11.4 9s-5.1 9.1-11.4 9.1c-.6 0-1.3 0-1.9-.1-1.5 1.3-3.2 2-4.9 2zm-1-1.1c1.7.4 3.7-.3 5.5-1.8 0-.1.2-.2.3-.1.6.1 1.3.1 2 .1 5.7 0 10.4-3.6 10.4-8.1S17.7 3 12 3 1.6 6.6 1.6 11c0 2.6 1.6 5 4.3 6.5.2.1.3.4.2.6 0 .3-.1.6-.3.9-.4.8-1 1.4-1.6 1.9z"
+        />
+      </symbol>
+      <!-- breadcrumbs-icon -->
+      <symbol id="breadcrumbs-icon" viewBox="0 0 23 20">
+        <path d="M5.80988 6H17.0423L11.4261 15L5.80988 6Z" fill="#858585"/>
+      </symbol>
+    </svg>
     <!-- -----------------HEADER------------------------ -->
     <header>
       <div class="container header__container">
-        <img src="/img/logo.svg" alt="Logo" />
+        <a href="#" class="header__logo-link"
+          ><img src="/img/logo.svg" alt="Logo" class="header__logo"
+        /></a>
         <div class="header__breadcrumbs">
-          <span class="header__breadcrumbs_home">Home</span>
+          <span>Home</span>
         </div>
         <button class="primary-btn header__btn">Log in</button>
       </div>
@@ -32,11 +48,17 @@
     <!-- --------------------MAIN---------------------------- -->
     <!-- --------------------NEW TWEET----------------------- -->
     <div class="container__flex">
-      <main>
+      <main class="main__new-tweet_container">
         <div class="main__new-tweet">
           <div class="new-tweet__header">
-            <div class="user-icon"></div>
-            <input type="text" class="tweet__header_input" placeholder="What's happening?">
+            <div class="user-icon__container">
+              <div class="user-icon"></div>
+            </div>
+            <input
+              type="text"
+              class="tweet__header_input"
+              placeholder="What's happening?"
+            />
           </div>
           <div class="new-tweet__footer">
             <button class="primary-btn">Tell</button>
@@ -45,23 +67,151 @@
         <!-- --------------------TWEETS--------------------------- -->
         <div class="main__tweet">
           <div class="tweet__container">
-           <div class="user__container"> <div class="user-icon"></div></div>
+            <div class="user-icon__container">
+              <div class="user-icon"></div>
+            </div>
             <div class="tweet__text">
               <div class="tweet__text_header">
                 <span class="text__header_user-name">Zhenya Goroh</span>
-                <img src="/img/Dot.svg">
+                <img src="/img/Dot.svg" />
                 <div class="text__header_date">
-                  <span class="header__date_month">31 July</span>
-                  <span class="header__date_time">15:00</span>
+                  <span class="text__header_date-month">31 July</span>
+                  <span class="text__header_date-time">15:00</span>
                 </div>
               </div>
-              <div class="tweet__text_main">Студия Артемия Лебедева установила на въезде в Териберку стелу «в форме хвоста только что показавшегося из воды кита».</div>
-              <div class="tweet__text_footer"></div>
+              <div class="tweet__text_main">
+                Студия Артемия Лебедева установила на въезде в Териберку стелу
+                «в форме хвоста только что показавшегося из воды кита».
+              </div>
+              <div class="tweet__text_footer">
+                <svg class="tweet__message_icon">
+                  <use xlink:href="#message"></use>
+                </svg>
+
+                <span class="tweet__message_count">0</span>
+              </div>
             </div>
           </div>
         </div>
+        <div class="main__tweet">
+          <div class="tweet__container">
+            <div class="user-icon__container">
+              <div class="user-icon"></div>
+            </div>
+            <div class="tweet__text">
+              <div class="tweet__text_header">
+                <span class="text__header_user-name">Zhenya Goroh</span>
+                <img src="/img/Dot.svg" />
+                <div class="text__header_date">
+                  <span class="text__header_date-month">31 July</span>
+                  <span class="text__header_date-time">15:00</span>
+                </div>
+              </div>
+              <div class="tweet__text_main">
+                <span class="hashtag">#HashTag</span> Студия Артемия Лебедева
+                установила на въезде в Териберку стелу «в форме хвоста только
+                что показавшегося из воды кита».
+              </div>
+              <div class="tweet__text_footer">
+                <svg class="tweet__message_icon">
+                  <use xlink:href="#message"></use>
+                </svg>
+                <span class="tweet__message_count">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tweets__load-more-btn">
+          <button class="primary-btn load-more-btn">Load more</button>
+        </div>
       </main>
-      <aside></aside>
+      <!-- -------------------------FILTERS----------------------------------- -->
+      <aside>
+        <div class="filters">
+          <div class="filters__title"><h2>Filters</h2></div>
+          <div class="filters__container">
+            <div class="search-by-author">
+              <span class="search-by-author__subtitle"
+                >Search tweets by author name</span
+              >
+              <input
+                type="Select"
+                placeholder="Select author"
+                class="filters-input search-author-input"
+              />
+            </div>
+            <div class="search-by-date-time">
+              <span class="search-by-date__subtitle"
+                >Search tweets by date and time</span
+              >
+              <div class="search-by-date">
+                <span class="search-by-date__from">from</span>
+                <input
+                  type="text"
+                  class="filters-input search-by-date__from_input"
+                  placeholder="Enter start date"
+                />
+                <span class="search-by-date__to">to</span>
+                <input
+                  type="text"
+                  class="filters-input search-by-date__to_input"
+                  placeholder="Enter end date"
+                />
+              </div>
+              <div class="search-by-time">
+                <span class="search-by-time__from">from</span>
+                <input
+                  type="text"
+                  class="filters-input search-by-time__from_input"
+                  placeholder="Enter start time"
+                />
+                <span class="search-by-time__to">to</span>
+                <input
+                  type="text"
+                  class="filters-input search-by-time__to_input"
+                  placeholder="Enter end time"
+                />
+              </div>
+            </div>
+            <div class="search-by-text-tags">
+              <div class="search-by-text">
+                <span class="search-by-text__subtitle"
+                  >Search tweets by text</span
+                >
+                <input
+                  type="text"
+                  placeholder="Enter search text"
+                  class="filters-input search-by-text__input"
+                />
+              </div>
+              <div class="search-by-tags">
+                <span class="search-by-tags__subtitle"
+                  >Search tweets by #tags</span
+                >
+                <input
+                  type="text"
+                  class="filters-input search-by-tags__input"
+                  placeholder="Enter search #tags"
+                />
+              </div>
+            </div>
+            <div class="filters__btn">
+              <button class="clear-btn">clear</button>
+              <button class="primary-btn">SEARCH</button>
+            </div>
+          </div>
+        </div>
+      </aside>
     </div>
+    <!-- -----------------------------FOOTER---------------------------- -->
+    <footer>
+      <span>Tale</span>
+      <span>Zhenya Goroh</span>
+      <a href="mailto:zhenyagoroh@gmail.com">zhenyagoroh@gmail.com</a>
+      <span>1 Aug 2022</span>
+    </footer>
+    <!-- ============================= SCRIPTS ============================= -->
+    <script type="module" src="/Script/task1.js"></script>
+    <script type="module" src="/Script/task2.js"></script>
   </body>
 </html>
