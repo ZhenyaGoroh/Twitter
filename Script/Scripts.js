@@ -303,11 +303,11 @@ function changeUser(usr) {
 }
 
 class Comment {
-  constructor(id, text, createdAt, author) {
-    this._id = id;
-    this.text = text;
-    this._createdAt = new Date(createdAt);
-    this._author = author;
+  constructor(comment) {
+    this._id = comment.id;
+    this.text = comment.text;
+    this._createdAt = new Date(comment.createdAt);
+    this._author = comment.author;
   }
 
   get id() {
@@ -544,5 +544,6 @@ let tweetCol = new TweetCollection([
     comments: [],
   },
 ]);
+
 
 
