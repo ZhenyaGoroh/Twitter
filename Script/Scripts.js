@@ -493,7 +493,7 @@ class TweetCollection {
       author: this.user,
     };
     if (this.#validateComment(comment)) {
-      this.#get(id).comments.push(comment);
+      this.#get(id).comments.push(new Comment(comment));
       return true;
     }
     return false;
@@ -545,39 +545,4 @@ let tweetCol = new TweetCollection([
   },
 ]);
 
-console.log(
-  tweetCol.addAll([
-    {
-      id: "1",
-      text: "Привет!",
-      createdAt: new Date("2022-03-09T23:00:00"),
-      author: "Zhenya",
-      comments: [],
-    },
-    {
-      text: "Как дела?",
-      createdAt: new Date("2022-03-09T23:00:01"),
-      author: "Петров Петр",
-      comments: [
-        {
-          id: "21",
-          text: "Хорошо, а у тебя?",
-          createdAt: new Date("2022-03-09T23:00:05"),
-          author: "Иванов Иван",
-        },
-      ],
-    },
-    {
-      id: "3",
-      text: "Если смогу, я сделаю это. Конец истории.",
-      createdAt: new Date("2022-03-09T23:10:00"),
-      author: "Андреев Давид",
-      comments: [],
-    },
-  ])
-);
 
-console.log(tweetCol.tweets);
-
-console.log(tweetCol.clear());
-console.log(tweetCol.tweets);
