@@ -189,119 +189,6 @@ const tweets = [
   },
 ];
 
-let user = "Zhenya";
-
-function getTweets(skip = 0, top = 10, filterConfig = {}) {
-  return (
-    tweets
-      // поиск по автору
-      .filter(
-        (tweet) =>
-          !filterConfig.author ||
-          tweet.author.toLowerCase().includes(filterConfig.author.toLowerCase())
-      ) //поиск по тексту
-      .filter(
-        (tweet) =>
-          !filterConfig.text ||
-          tweet.text.toLowerCase().includes(filterConfig.text?.toLowerCase())
-      ) //поиск по дате "c"
-      .filter(
-        (tweet) =>
-          !filterConfig.dateFrom ||
-          new Date(tweet.createdAt) >= new Date(filterConfig.dateFrom)
-      ) //поиск по дате "до"
-      .filter(
-        (tweet) =>
-          !filterConfig.dateTo ||
-          new Date(tweet.createdAt) <= new Date(filterConfig.dateTo)
-      )
-      .slice(skip, skip + top)
-  );
-}
-
-function getTweet(id) {
-  return tweets.find((tweet) => tweet.id === id);
-}
-
-function validateTweet(tweet) {
-  return (
-    typeof tweet.id === "string" &&
-    typeof tweet.text === "string" &&
-    tweet.text.length <= 280 &&
-    tweet.createdAt instanceof Date &&
-    typeof tweet.author === "string" &&
-    Array.isArray(tweet.comments)
-  );
-}
-
-function addTweet(text) {
-  if (typeof text !== "string" || text.length > 280) return false;
-  const tweet = {
-    id: String(
-      parseInt(new Date().toString().slice(7, 25).replace(/[^\d]/g, ""))
-    ),
-    text: text,
-    createdAt: new Date(),
-    author: user,
-    comments: [],
-  };
-  if (validateTweet(tweet)) {
-    tweets.push(tweet);
-    return true;
-  }
-
-  return false;
-}
-
-function editTweet(id, text) {
-  if (
-    typeof text !== "string" ||
-    text.length > 280 ||
-    getTweet(id).author !== user
-  )
-    return false;
-
-  getTweet(id).text = text;
-  return true;
-}
-
-function removeTweet(id) {
-  if (getTweet(id).author !== user) return false;
-  tweets.splice(tweets.indexOf(getTweet(id)), 1);
-  return true;
-}
-
-function validateComment(com) {
-  return (
-    typeof com.id === "string" &&
-    typeof com.text === "string" &&
-    com.text.length <= 280 &&
-    com.createdAt instanceof Date &&
-    typeof com.author === "string"
-  );
-}
-
-function addComment(id, text) {
-  if (typeof text !== "string" && text.length > 280) return false;
-  const comment = {
-    id: String(
-      parseInt(new Date().toString().slice(7, 25).replace(/[^\d]/g, ""))
-    ),
-    text: text,
-    createdAt: new Date(),
-    author: user,
-  };
-  if (validateComment(comment)) {
-    getTweet(id).comments.push(comment);
-    return true;
-  }
-  return false;
-}
-
-function changeUser(usr) {
-  return typeof usr === "string" ? (user = usr) : false;
-}
-
 class Comment {
   constructor(comment) {
     this._id = comment.id;
@@ -322,13 +209,11 @@ class Comment {
     return this._createdAt;
   }
 
-  #maxTextLength = 280;
-
   static validate(com) {
     return (
       typeof com.id === "string" &&
       typeof com.text === "string" &&
-      com.text.length <= maxTextLength &&
+      com.text.length <= Tweet.maxTextLength &&
       com.createdAt instanceof Date &&
       typeof com.author === "string"
     );
@@ -356,13 +241,13 @@ class Tweet {
     return this._createdAt;
   }
 
-  #maxTextLength = 280;
+  static maxTextLength = 280;
 
   static validate(tweet) {
     return (
       typeof tweet.id === "string" &&
       typeof tweet.text === "string" &&
-      tweet.text.length <= maxTextLength &&
+      tweet.text.length <= Tweet.maxTextLength &&
       tweet.createdAt instanceof Date &&
       typeof tweet.author === "string" &&
       Array.isArray(tweet.comments)
@@ -371,6 +256,9 @@ class Tweet {
 }
 
 class TweetCollection {
+  constructor(tweets) {
+    this.tweets = tweets;
+  }
   //private mothods
   _user = "";
 
@@ -381,40 +269,12 @@ class TweetCollection {
   set user(user) {
     this._user = user;
   }
-  // tweet validation
-  #validateTweet(tweet) {
-    return (
-      typeof tweet.id === "string" &&
-      typeof tweet.text === "string" &&
-      tweet.text.length <= 280 &&
-      tweet.createdAt instanceof Date &&
-      typeof tweet.author === "string" &&
-      Array.isArray(tweet.comments)
-    );
-  }
 
-  // comment validation
-  #validateComment(com) {
-    return (
-      typeof com.id === "string" &&
-      typeof com.text === "string" &&
-      com.text.length <= 280 &&
-      com.createdAt instanceof Date &&
-      typeof com.author === "string"
-    );
-  }
   // get tweet by id
   #get(id) {
     return tweets.find((tweet) => tweet.id === id);
   }
 
-  constructor(tweets) {
-    this._tweets = tweets;
-  }
-
-  get tweets() {
-    return this._tweets;
-  }
   //public methods
   getPage(skip = 0, top = 10, filterConfig = {}) {
     return (
@@ -446,7 +306,8 @@ class TweetCollection {
     );
   }
   add(text) {
-    if (typeof text !== "string" || text.length > 280) return false;
+    if (typeof text !== "string" || text.length > Tweet.maxTextLength)
+      return false;
     const tweet = {
       id: String(
         parseInt(new Date().toString().slice(7, 25).replace(/[^\d]/g, ""))
@@ -456,7 +317,7 @@ class TweetCollection {
       author: this.user,
       comments: [],
     };
-    if (this.#validateTweet(tweet)) {
+    if (Tweet.validate(tweet)) {
       this.tweets.push(tweet);
       return true;
     }
@@ -492,7 +353,7 @@ class TweetCollection {
       createdAt: new Date(),
       author: this.user,
     };
-    if (this.#validateComment(comment)) {
+    if (Comment.validate(comment)) {
       this.#get(id).comments.push(new Comment(comment));
       return true;
     }
@@ -502,48 +363,15 @@ class TweetCollection {
   addAll(tweets) {
     let invalidTweets = [];
     tweets.map((tweet) => {
-      this.#validateTweet(tweet)
-        ? this.tweets.push(tweet)
-        : invalidTweets.push(tweet);
+      Tweet.validate(tweet)
+        ? this.tweets.push(new Tweet(tweet))
+        : invalidTweets.push(new Tweet(tweet));
     });
     return invalidTweets;
   }
 
   clear() {
-    return (this._tweets = []);
+    return (this.tweets = []);
   }
 }
-
-let tweetCol = new TweetCollection([
-  {
-    id: "1",
-    text: "Привет!",
-    createdAt: new Date("2022-03-09T23:00:00"),
-    author: "Zhenya",
-    comments: [],
-  },
-  {
-    id: "2",
-    text: "Как дела?",
-    createdAt: new Date("2022-03-09T23:00:01"),
-    author: "Петров Петр",
-    comments: [
-      {
-        id: "21",
-        text: "Хорошо, а у тебя?",
-        createdAt: new Date("2022-03-09T23:00:05"),
-        author: "Иванов Иван",
-      },
-    ],
-  },
-  {
-    id: "3",
-    text: "Если смогу, я сделаю это. Конец истории.",
-    createdAt: new Date("2022-03-09T23:10:00"),
-    author: "Андреев Давид",
-    comments: [],
-  },
-]);
-
-
 
