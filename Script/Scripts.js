@@ -375,3 +375,18 @@ class TweetCollection {
   }
 }
 
+
+class HeaderView{
+  constructor(containerId){
+    this.container = document.getElementById(containerId)
+  }
+
+  display(name){
+    this.container.lastChild.innerHTML = name;
+    document.getElementById("header-btn").classList.remove("primary-btn").add("logout-btn")
+  }
+}
+
+let header = HeaderView(header__user);
+
+header.display("Nata")
