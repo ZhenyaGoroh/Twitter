@@ -375,18 +375,18 @@ class TweetCollection {
   }
 }
 
-
-class HeaderView{
-  constructor(containerId){
-    this.container = document.getElementById(containerId)
+class HeaderView {
+  constructor(containerId) {
+    this.container = document.getElementById(containerId);
   }
 
-  display(name){
-    this.container.lastChild.innerHTML = name;
-    document.getElementById("header-btn").classList.remove("primary-btn").add("logout-btn")
+  display(name) {
+    this.container.nextElementSibling.remove();
+    this.container.style.visibility = "visible";
+    this.container.lastElementChild.previousElementSibling.innerHTML = name;
   }
 }
 
-let header = HeaderView(header__user);
+const header = new HeaderView("header__user")
 
-header.display("Nata")
+header.display("Наташа")
