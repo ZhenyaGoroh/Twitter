@@ -18,6 +18,24 @@ const tweets = [
         createdAt: new Date("2022-03-09T23:00:05"),
         author: "Иванов Иван",
       },
+      {
+        id: "21",
+        text: "Хорошо, а у тебя?",
+        createdAt: new Date("2022-03-09T23:00:05"),
+        author: "Иванов Иван",
+      },
+      {
+        id: "21",
+        text: "Хорошо, а у тебя?",
+        createdAt: new Date("2022-03-09T23:00:05"),
+        author: "Иванов Иван",
+      },
+      {
+        id: "21",
+        text: "Хорошо, а у тебя?",
+        createdAt: new Date("2022-03-09T23:00:05"),
+        author: "Иванов Иван",
+      },
     ],
   },
   {
@@ -57,7 +75,9 @@ const tweets = [
   },
   {
     id: "7",
-    text: "Если смогу, я сделаю это. Конец истории.",
+    text: `'long' использует полное название месяца, 'short' для короткого названия, и 'narrow' для более минимальной версии, например первой буквы в алфавитных языках
+    Вы можете изменить локаль с браузерной 'default' на любую, которая вам понравится (e.g. 'en-us'), и она будет использовать правильное название для того language/country.
+    С помощью toLocaleStringapi приходится каждый раз проходить в локали и опциях. Если вы собираетесь делать использовать одну и ту же локаль инфой и варианты форматирования на кратные разные даты, то можете использовать Intl.DateTimeFormat вместо этого:`,
     createdAt: new Date("2022-03-09T23:31:00"),
     author: "Wayne Martin",
     comments: [
@@ -162,7 +182,7 @@ const tweets = [
   {
     id: "18",
     text: "Python",
-    createdAt: new Date("2022-03-091T12:11:00"),
+    createdAt: new Date(),
     author: "Mihnosha",
     comments: [
       {
@@ -374,7 +394,7 @@ class TweetCollection {
     return (this.tweets = []);
   }
 }
-
+const tweetsCol = new TweetCollection(tweets);
 class HeaderView {
   constructor(containerId) {
     this.container = document.getElementById(containerId);
@@ -387,6 +407,71 @@ class HeaderView {
   }
 }
 
-const header = new HeaderView("header__user")
+const header = new HeaderView("header__user");
+// TODO: user from tweetsCollection
+header.display(tweetsCol.user);
 
-header.display("Наташа")
+class TweetCollectionView {
+  constructor(containerId) {
+    this.container = document.getElementById(containerId);
+  }
+
+  #monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  display(tweets) {
+    tweets.map((tweet) =>
+      this.container.insertAdjacentHTML(
+        "beforeend",
+        `<div class="main__tweet">
+          <div class="tweet__container">
+            <div class="user-icon__container">
+              <div class="user-icon"></div>
+             </div>
+         <div class="tweet__text">
+          <div class="tweet__text_header">
+            <span class="text__header_user-name">${tweet.author}</span>
+            <img src="/img/Dot.svg" />
+            <div class="text__header_date">
+              <span class="text__header_date-month">${tweet.createdAt.getDate()} ${
+          this.#monthNames[tweet.createdAt.getMonth()]
+        }</span>
+              <span class="text__header_date-time">${tweet.createdAt.getHours()}:${
+          String(tweet.createdAt.getMinutes()).length > 1
+            ? tweet.createdAt.getMinutes()
+            : tweet.createdAt.getMinutes() + "0"
+        }</span>
+            </div>
+          </div>
+          <div class="tweet__text_main">
+            ${tweet.text}
+          </div>
+          <div class="tweet__text_footer">
+            <svg class="tweet__message_icon">
+              <use xlink:href="#message"></use>
+            </svg>
+
+            <span class="tweet__message_count">${tweet.comments.length}</span>
+          </div>
+        </div>
+      </div>
+    </div>`
+      )
+    );
+  }
+}
+
+const tweetsColView = new TweetCollectionView("tweets");
+tweetsColView.display(tweetsCol.getPage(0, 10));
