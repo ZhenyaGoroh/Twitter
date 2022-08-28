@@ -9,13 +9,13 @@ const tweets = [
   {
     id: "2",
     text: "Как дела?",
-    createdAt: new Date("2022-03-09T23:00:01"),
+    createdAt: new Date("2022-10-10T23:00:01"),
     author: "Петров Петр",
     comments: [
       {
         id: "21",
         text: "Хорошо, а у тебя?",
-        createdAt: new Date("2022-03-09T23:00:05"),
+        createdAt: new Date("2022-03-10T23:00:05"),
         author: "Иванов Иван",
       },
       {
@@ -41,14 +41,14 @@ const tweets = [
   {
     id: "3",
     text: "Если смогу, я сделаю это. Конец истории.",
-    createdAt: new Date("2022-03-09T23:10:00"),
+    createdAt: new Date("2022-03-10T23:10:00"),
     author: "Андреев Давид",
     comments: [],
   },
   {
     id: "4",
     text: "Зачем нужен модуль?",
-    createdAt: new Date("2022-03-09T23:10:50"),
+    createdAt: new Date("2022-03-10T23:10:50"),
     author: "Андреев Давид",
     comments: [
       {
@@ -92,7 +92,7 @@ const tweets = [
   {
     id: "8",
     text: "Если смогу, я сделаю это. Конец истории.",
-    createdAt: new Date("2022-03-09T23:35:10"),
+    createdAt: new Date("2022-03-10T23:35:10"),
     author: "Сергей",
     comments: [],
   },
@@ -315,14 +315,37 @@ class TweetCollection {
         .filter(
           (tweet) =>
             !filterConfig.dateFrom ||
-            new Date(tweet.createdAt) >= new Date(filterConfig.dateFrom)
+            (new Date(tweet.createdAt).getFullYear() >=
+              new Date(filterConfig.dateFrom).getFullYear() &&
+              new Date(tweet.createdAt).getMonth() >=
+                new Date(filterConfig.dateFrom).getMonth() &&
+              new Date(tweet.createdAt).getDate() >=
+                new Date(filterConfig.dateFrom).getDate())
         ) //поиск по дате "до"
         .filter(
           (tweet) =>
             !filterConfig.dateTo ||
-            new Date(tweet.createdAt) <= new Date(filterConfig.dateTo)
+            (new Date(tweet.createdAt).getFullYear() <=
+              new Date(filterConfig.dateTo).getFullYear() &&
+              new Date(tweet.createdAt).getMonth() <=
+                new Date(filterConfig.dateTo).getMonth() &&
+              new Date(tweet.createdAt).getDate() <=
+                new Date(filterConfig.dateTo).getDate())
+        )
+        .filter(
+          (tweet) =>
+            !filterConfig.timeFrom ||
+            new Date(tweet.createdAt).toLocaleTimeString() >=
+              filterConfig.timeFrom
+        ) //поиск по дате "до"
+        .filter(
+          (tweet) =>
+            !filterConfig.timeTo ||
+            new Date(tweet.createdAt).toLocaleTimeString() <=
+              filterConfig.timeTo
         )
         .slice(skip, skip + top)
+        .sort((a, b) => b.createdAt - a.createdAt)
     );
   }
   add(text) {
@@ -395,6 +418,11 @@ class TweetCollection {
   }
 }
 const tweetsCol = new TweetCollection(tweets);
+console.log(tweetsCol.getPage(0, 10, { timeFrom: "13:00" }));
+// console.log(new Date("09.03.2022").);
+// console.log(new Date("10.03.2022").toLocaleDateString().getTime());
+// console.log(tweets[0].createdAt.);
+
 class HeaderView {
   constructor(containerId) {
     this.container = document.getElementById(containerId);
@@ -406,10 +434,6 @@ class HeaderView {
     this.container.lastElementChild.previousElementSibling.innerHTML = name;
   }
 }
-
-const header = new HeaderView("header__user");
-// TODO: user from tweetsCollection
-header.display(tweetsCol.user);
 
 class TweetCollectionView {
   constructor(containerId) {
@@ -435,7 +459,7 @@ class TweetCollectionView {
     tweets.map((tweet) =>
       this.container.insertAdjacentHTML(
         "beforeend",
-        `<div class="main__tweet">
+        `<div class="main__tweet" id="main__tweet">
           <div class="tweet__container">
             <div class="user-icon__container">
               <div class="user-icon"></div>
@@ -473,5 +497,34 @@ class TweetCollectionView {
   }
 }
 
+class FilterView {
+  constructor(containerId) {
+    this.container = document.getElementById(containerId);
+  }
+
+  display(filterConfig = {}) {
+    return filterConfig = {
+      author:
+        `${this.container.firstElementChild.lastElementChild.value}` || "",
+      dateFrom:
+        `${this.container.children[1].children[1].children[1].value}` || "",
+      dateTo:
+        `${this.container.children[1].children[1].children[3].value}` || "",
+      timeFrom:
+        `${this.container.children[1].children[2].children[1].value}` || "",
+      timeTo:
+        `${this.container.children[1].children[2].children[3].value}` || "",
+      text:`${this.container.children[2].firstElementChild.lastElementChild.value}`||""
+    };
+  }
+}
+
+const header = new HeaderView("header__user");
+header.display(tweetsCol.user);
+
+const inputs = new FilterView("filters")
+
 const tweetsColView = new TweetCollectionView("tweets");
-tweetsColView.display(tweetsCol.getPage(0, 10));
+
+
+

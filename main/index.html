@@ -70,8 +70,7 @@
           </div>
         </div>
         <!-- --------------------TWEETS--------------------------- -->
-        <div class="tweets" id="tweets">
-        </div>
+        <div class="tweets" id="tweets"></div>
         <div class="tweets__load-more-btn">
           <button class="primary-btn load-more-btn">Load more</button>
         </div>
@@ -80,7 +79,7 @@
       <aside>
         <div class="filters">
           <div class="filters__title"><h2>Filters</h2></div>
-          <div class="filters__container">
+          <div class="filters__container" id="filters">
             <div class="search-by-author">
               <span class="search-by-author__subtitle"
                 >Search tweets by author name</span
@@ -98,13 +97,13 @@
               <div class="search-by-date">
                 <span class="search-by-date__from">from</span>
                 <input
-                  type="text"
+                  type="date"
                   class="filters-input search-by-date__from_input"
                   placeholder="Enter start date"
                 />
                 <span class="search-by-date__to">to</span>
                 <input
-                  type="text"
+                  type="date"
                   class="filters-input search-by-date__to_input"
                   placeholder="Enter end date"
                 />
@@ -112,13 +111,13 @@
               <div class="search-by-time">
                 <span class="search-by-time__from">from</span>
                 <input
-                  type="text"
+                  type="time"
                   class="filters-input search-by-time__from_input"
                   placeholder="Enter start time"
                 />
                 <span class="search-by-time__to">to</span>
                 <input
-                  type="text"
+                  type="time"
                   class="filters-input search-by-time__to_input"
                   placeholder="Enter end time"
                 />
@@ -148,7 +147,14 @@
             </div>
             <div class="filters__btn">
               <button class="clear-btn">clear</button>
-              <button class="primary-btn">SEARCH</button>
+              <button
+                class="primary-btn"
+                id="search-btn"
+                onclick="document.getElementById(`tweets`).innerHTML = ``;
+                tweetsColView.display(tweetsCol.getPage(0, 10, inputs.display()))"
+              >
+                SEARCH
+              </button>
             </div>
           </div>
         </div>
