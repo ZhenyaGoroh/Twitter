@@ -1,7 +1,7 @@
 const tweets = [
   {
     id: "1",
-    text: "Привет!",
+    text: "Привет! #js #py",
     createdAt: new Date("2022-03-09T23:00:00"),
     author: "Zhenya",
     comments: [],
@@ -91,9 +91,9 @@ const tweets = [
   },
   {
     id: "8",
-    text: "Если смогу, я сделаю это. Конец истории.",
+    text: "Если смогу, я сделаю это. Конец истории. #py #cpp #js",
     createdAt: new Date("2022-03-10T23:35:10"),
-    author: "Сергей",
+    author: "Давид",
     comments: [],
   },
   {
@@ -297,56 +297,61 @@ class TweetCollection {
 
   //public methods
   getPage(skip = 0, top = 10, filterConfig = {}) {
-    return (
-      this.tweets
-        // поиск по автору
-        .filter(
-          (tweet) =>
-            !filterConfig.author ||
-            tweet.author
-              .toLowerCase()
-              .includes(filterConfig.author.toLowerCase())
-        ) //поиск по тексту
-        .filter(
-          (tweet) =>
-            !filterConfig.text ||
-            tweet.text.toLowerCase().includes(filterConfig.text?.toLowerCase())
-        ) //поиск по дате "c"
-        .filter(
-          (tweet) =>
-            !filterConfig.dateFrom ||
-            (new Date(tweet.createdAt).getFullYear() >=
-              new Date(filterConfig.dateFrom).getFullYear() &&
-              new Date(tweet.createdAt).getMonth() >=
-                new Date(filterConfig.dateFrom).getMonth() &&
-              new Date(tweet.createdAt).getDate() >=
-                new Date(filterConfig.dateFrom).getDate())
-        ) //поиск по дате "до"
-        .filter(
-          (tweet) =>
-            !filterConfig.dateTo ||
-            (new Date(tweet.createdAt).getFullYear() <=
-              new Date(filterConfig.dateTo).getFullYear() &&
-              new Date(tweet.createdAt).getMonth() <=
-                new Date(filterConfig.dateTo).getMonth() &&
-              new Date(tweet.createdAt).getDate() <=
-                new Date(filterConfig.dateTo).getDate())
-        )
-        .filter(
-          (tweet) =>
-            !filterConfig.timeFrom ||
-            new Date(tweet.createdAt).toLocaleTimeString() >=
-              filterConfig.timeFrom
-        ) //поиск по дате "до"
-        .filter(
-          (tweet) =>
-            !filterConfig.timeTo ||
-            new Date(tweet.createdAt).toLocaleTimeString() <=
-              filterConfig.timeTo
-        )
-        .slice(skip, skip + top)
-        .sort((a, b) => b.createdAt - a.createdAt)
-    );
+    let tweetsFiltered = this.tweets
+      // поиск по автору
+      .filter(
+        (tweet) =>
+          !filterConfig.author ||
+          tweet.author.toLowerCase().includes(filterConfig.author.toLowerCase())
+      ) //поиск по тексту
+      .filter(
+        (tweet) =>
+          !filterConfig.text ||
+          tweet.text.toLowerCase().includes(filterConfig.text?.toLowerCase())
+      ) //поиск по дате "c"
+      .filter(
+        (tweet) =>
+          !filterConfig.dateFrom ||
+          new Date(tweet.createdAt)
+            .toLocaleDateString()
+            .split(".")
+            .reverse()
+            .join("") >=
+            new Date(filterConfig.dateFrom)
+              .toLocaleDateString()
+              .split(".")
+              .reverse()
+              .join("")
+      ) //поиск по дате "до"
+      .filter(
+        (tweet) =>
+          !filterConfig.dateTo ||
+          new Date(tweet.createdAt)
+            .toLocaleDateString()
+            .split(".")
+            .reverse()
+            .join("") <=
+            new Date(filterConfig.dateTo)
+              .toLocaleDateString()
+              .split(".")
+              .reverse()
+              .join("")
+      )
+      .filter(
+        (tweet) =>
+          !filterConfig.timeFrom ||
+          new Date(tweet.createdAt).toLocaleTimeString() >=
+            filterConfig.timeFrom
+      ) //поиск по дате "до"
+      .filter(
+        (tweet) =>
+          !filterConfig.timeTo ||
+          new Date(tweet.createdAt).toLocaleTimeString() <= filterConfig.timeTo
+      )
+      .slice(skip, skip + top)
+      .sort((a, b) => b.createdAt - a.createdAt);
+
+      return filterConfig.hashtag?filterConfig.hashtag.split(" ").reduce((tweets,elem)=>tweets.filter(tweet=>tweet.text.includes(elem)),tweetsFiltered):tweetsFiltered
   }
   add(text) {
     if (typeof text !== "string" || text.length > Tweet.maxTextLength)
@@ -418,10 +423,8 @@ class TweetCollection {
   }
 }
 const tweetsCol = new TweetCollection(tweets);
-console.log(tweetsCol.getPage(0, 10, { timeFrom: "13:00" }));
-// console.log(new Date("09.03.2022").);
-// console.log(new Date("10.03.2022").toLocaleDateString().getTime());
-// console.log(tweets[0].createdAt.);
+
+console.log(tweetsCol.getPage(0,10,{hashtag:'#js'}));
 
 class HeaderView {
   constructor(containerId) {
@@ -503,7 +506,7 @@ class FilterView {
   }
 
   display(filterConfig = {}) {
-    return filterConfig = {
+    return (filterConfig = {
       author:
         `${this.container.firstElementChild.lastElementChild.value}` || "",
       dateFrom:
@@ -514,17 +517,17 @@ class FilterView {
         `${this.container.children[1].children[2].children[1].value}` || "",
       timeTo:
         `${this.container.children[1].children[2].children[3].value}` || "",
-      text:`${this.container.children[2].firstElementChild.lastElementChild.value}`||""
-    };
+      text:
+        `${this.container.children[2].firstElementChild.lastElementChild.value}` ||
+        "",
+      hashtag: `${this.container.children[2].lastElementChild.lastElementChild.value}`,
+    });
   }
 }
 
 const header = new HeaderView("header__user");
-header.display(tweetsCol.user);
 
-const inputs = new FilterView("filters")
+const inputs = new FilterView("filters");
 
 const tweetsColView = new TweetCollectionView("tweets");
-
-
-
+tweetsColView.display(tweetsCol.getPage(0, 10, inputs.display()));

@@ -44,9 +44,9 @@
         <div id="header__user">
           <div class="user-icon"></div>
           <span class="user-name">Zhenya</span>
-          <button class="logout-btn header-btn">Log out</button>
+          <button class="logout-btn header-btn" onclick="l">Log out</button>
         </div>
-        <button class="primary-btn header__btn" id="header-btn">Log in</button>
+        <button class="primary-btn header__btn" id="header-btn" onclick="header.display();">Log in</button>
       </div>
     </header>
 
@@ -152,6 +152,7 @@
                 id="search-btn"
                 onclick="document.getElementById(`tweets`).innerHTML = ``;
                 tweetsColView.display(tweetsCol.getPage(0, 10, inputs.display()))"
+                
               >
                 SEARCH
               </button>
