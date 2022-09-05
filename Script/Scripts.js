@@ -351,7 +351,15 @@ class TweetCollection {
       .slice(skip, skip + top)
       .sort((a, b) => b.createdAt - a.createdAt);
 
-      return filterConfig.hashtag?filterConfig.hashtag.split(" ").reduce((tweets,elem)=>tweets.filter(tweet=>tweet.text.includes(elem)),tweetsFiltered):tweetsFiltered
+    return filterConfig.hashtag
+      ? filterConfig.hashtag
+          .split(" ")
+          .reduce(
+            (tweets, elem) =>
+              tweets.filter((tweet) => tweet.text.includes(elem)),
+            tweetsFiltered
+          )
+      : tweetsFiltered;
   }
   add(text) {
     if (typeof text !== "string" || text.length > Tweet.maxTextLength)
@@ -424,7 +432,7 @@ class TweetCollection {
 }
 const tweetsCol = new TweetCollection(tweets);
 
-console.log(tweetsCol.getPage(0,10,{hashtag:'#js'}));
+console.log(tweetsCol.getPage(0, 10, { hashtag: "#js" }));
 
 class HeaderView {
   constructor(containerId) {
@@ -457,77 +465,77 @@ class TweetCollectionView {
     "November",
     "December",
   ];
-
+  
   display(tweets) {
-    tweets.map((tweet) =>
-      this.container.insertAdjacentHTML(
-        "beforeend",
-        `<div class="main__tweet" id="main__tweet">
-          <div class="tweet__container">
-            <div class="user-icon__container">
-              <div class="user-icon"></div>
-             </div>
-         <div class="tweet__text">
-          <div class="tweet__text_header">
-            <span class="text__header_user-name">${tweet.author}</span>
-            <img src="/img/Dot.svg" />
-            <div class="text__header_date">
-              <span class="text__header_date-month">${tweet.createdAt.getDate()} ${
-          this.#monthNames[tweet.createdAt.getMonth()]
-        }</span>
-              <span class="text__header_date-time">${tweet.createdAt.getHours()}:${
-          String(tweet.createdAt.getMinutes()).length > 1
-            ? tweet.createdAt.getMinutes()
-            : tweet.createdAt.getMinutes() + "0"
-        }</span>
-            </div>
-          </div>
-          <div class="tweet__text_main">
-            ${tweet.text}
-          </div>
-          <div class="tweet__text_footer">
-            <svg class="tweet__message_icon">
-              <use xlink:href="#message"></use>
-            </svg>
-
-            <span class="tweet__message_count">${tweet.comments.length}</span>
-          </div>
-        </div>
+    let tweetsHtml = tweets.map((tweet)=>`<div class="main__tweet" id="${tweet.id}">
+    <div class="tweet__container">
+      <div class="user-icon__container">
+        <div class="user-icon"></div>
+       </div>
+   <div class="tweet__text">
+    <div class="tweet__text_header">
+      <span class="text__header_user-name">${tweet.author}</span>
+      <img src="/img/Dot.svg" />
+      <div class="text__header_date">
+        <span class="text__header_date-month">${tweet.createdAt.getDate()} ${
+      this.#monthNames[tweet.createdAt.getMonth()]
+    }</span>
+        <span class="text__header_date-time">${tweet.createdAt.getHours()}:${
+      String(tweet.createdAt.getMinutes()).length > 1
+        ? tweet.createdAt.getMinutes()
+        : tweet.createdAt.getMinutes() + "0"
+    }</span>
       </div>
-    </div>`
-      )
+    </div>
+    <div class="tweet__text_main">
+      ${tweet.text}
+    </div>
+    <div class="tweet__text_footer">
+      <svg class="tweet__message_icon">
+        <use xlink:href="#message"></use>
+      </svg>
+  
+      <span class="tweet__message_count">${tweet.comments.length}</span>
+    </div>
+  </div>
+  </div>
+  </div>`)
+    tweetsHtml.map((tweet) =>
+      this.container.insertAdjacentHTML("beforeend", tweet)
     );
   }
 }
 
 class FilterView {
-  constructor(containerId) {
-    this.container = document.getElementById(containerId);
+  constructor(containerName) {
+ this.container = document.forms[containerName];
   }
 
   display(filterConfig = {}) {
     return (filterConfig = {
       author:
-        `${this.container.firstElementChild.lastElementChild.value}` || "",
+        `${this.container.elements.author.value}` || "",
       dateFrom:
-        `${this.container.children[1].children[1].children[1].value}` || "",
+        `${this.container.elements.dateFrom.value}` || "",
       dateTo:
-        `${this.container.children[1].children[1].children[3].value}` || "",
+        `${this.container.elements.dateTo.value}` || "",
       timeFrom:
-        `${this.container.children[1].children[2].children[1].value}` || "",
+        `${this.container.elements.timeFrom.value}` || "",
       timeTo:
-        `${this.container.children[1].children[2].children[3].value}` || "",
+        `${this.container.elements.timeTo.value}` || "",
       text:
-        `${this.container.children[2].firstElementChild.lastElementChild.value}` ||
+        `${this.container.elements.text.value}` ||
         "",
-      hashtag: `${this.container.children[2].lastElementChild.lastElementChild.value}`,
+      hashtag: `${this.container.hashtags.value}`,
     });
   }
 }
 
-const header = new HeaderView("header__user");
 
 const inputs = new FilterView("filters");
+
+const header = new HeaderView("header__user");
+
 
 const tweetsColView = new TweetCollectionView("tweets");
 tweetsColView.display(tweetsCol.getPage(0, 10, inputs.display()));
