@@ -1,7 +1,7 @@
 const tweets = [
   {
     id: "1",
-    text: "Привет!",
+    text: "Привет! #js #py",
     createdAt: new Date("2022-03-09T23:00:00"),
     author: "Zhenya",
     comments: [],
@@ -9,9 +9,27 @@ const tweets = [
   {
     id: "2",
     text: "Как дела?",
-    createdAt: new Date("2022-03-09T23:00:01"),
+    createdAt: new Date("2022-10-10T23:00:01"),
     author: "Петров Петр",
     comments: [
+      {
+        id: "21",
+        text: "Хорошо, а у тебя?",
+        createdAt: new Date("2022-03-10T23:00:05"),
+        author: "Иванов Иван",
+      },
+      {
+        id: "21",
+        text: "Хорошо, а у тебя?",
+        createdAt: new Date("2022-03-09T23:00:05"),
+        author: "Иванов Иван",
+      },
+      {
+        id: "21",
+        text: "Хорошо, а у тебя?",
+        createdAt: new Date("2022-03-09T23:00:05"),
+        author: "Иванов Иван",
+      },
       {
         id: "21",
         text: "Хорошо, а у тебя?",
@@ -23,14 +41,14 @@ const tweets = [
   {
     id: "3",
     text: "Если смогу, я сделаю это. Конец истории.",
-    createdAt: new Date("2022-03-09T23:10:00"),
+    createdAt: new Date("2022-03-10T23:10:00"),
     author: "Андреев Давид",
     comments: [],
   },
   {
     id: "4",
     text: "Зачем нужен модуль?",
-    createdAt: new Date("2022-03-09T23:10:50"),
+    createdAt: new Date("2022-03-10T23:10:50"),
     author: "Андреев Давид",
     comments: [
       {
@@ -57,7 +75,9 @@ const tweets = [
   },
   {
     id: "7",
-    text: "Если смогу, я сделаю это. Конец истории.",
+    text: `'long' использует полное название месяца, 'short' для короткого названия, и 'narrow' для более минимальной версии, например первой буквы в алфавитных языках
+    Вы можете изменить локаль с браузерной 'default' на любую, которая вам понравится (e.g. 'en-us'), и она будет использовать правильное название для того language/country.
+    С помощью toLocaleStringapi приходится каждый раз проходить в локали и опциях. Если вы собираетесь делать использовать одну и ту же локаль инфой и варианты форматирования на кратные разные даты, то можете использовать Intl.DateTimeFormat вместо этого:`,
     createdAt: new Date("2022-03-09T23:31:00"),
     author: "Wayne Martin",
     comments: [
@@ -71,9 +91,9 @@ const tweets = [
   },
   {
     id: "8",
-    text: "Если смогу, я сделаю это. Конец истории.",
-    createdAt: new Date("2022-03-09T23:35:10"),
-    author: "Сергей",
+    text: "Если смогу, я сделаю это. Конец истории. #py #cpp #js",
+    createdAt: new Date("2022-03-10T23:35:10"),
+    author: "Давид",
     comments: [],
   },
   {
@@ -162,7 +182,7 @@ const tweets = [
   {
     id: "18",
     text: "Python",
-    createdAt: new Date("2022-03-091T12:11:00"),
+    createdAt: new Date(),
     author: "Mihnosha",
     comments: [
       {
@@ -277,33 +297,69 @@ class TweetCollection {
 
   //public methods
   getPage(skip = 0, top = 10, filterConfig = {}) {
-    return (
-      this.tweets
-        // поиск по автору
-        .filter(
-          (tweet) =>
-            !filterConfig.author ||
-            tweet.author
-              .toLowerCase()
-              .includes(filterConfig.author.toLowerCase())
-        ) //поиск по тексту
-        .filter(
-          (tweet) =>
-            !filterConfig.text ||
-            tweet.text.toLowerCase().includes(filterConfig.text?.toLowerCase())
-        ) //поиск по дате "c"
-        .filter(
-          (tweet) =>
-            !filterConfig.dateFrom ||
-            new Date(tweet.createdAt) >= new Date(filterConfig.dateFrom)
-        ) //поиск по дате "до"
-        .filter(
-          (tweet) =>
-            !filterConfig.dateTo ||
-            new Date(tweet.createdAt) <= new Date(filterConfig.dateTo)
-        )
-        .slice(skip, skip + top)
-    );
+    let tweetsFiltered = this.tweets
+      // поиск по автору
+      .filter(
+        (tweet) =>
+          !filterConfig.author ||
+          tweet.author.toLowerCase().includes(filterConfig.author.toLowerCase())
+      ) //поиск по тексту
+      .filter(
+        (tweet) =>
+          !filterConfig.text ||
+          tweet.text.toLowerCase().includes(filterConfig.text?.toLowerCase())
+      ) //поиск по дате "c"
+      .filter(
+        (tweet) =>
+          !filterConfig.dateFrom ||
+          new Date(tweet.createdAt)
+            .toLocaleDateString()
+            .split(".")
+            .reverse()
+            .join("") >=
+            new Date(filterConfig.dateFrom)
+              .toLocaleDateString()
+              .split(".")
+              .reverse()
+              .join("")
+      ) //поиск по дате "до"
+      .filter(
+        (tweet) =>
+          !filterConfig.dateTo ||
+          new Date(tweet.createdAt)
+            .toLocaleDateString()
+            .split(".")
+            .reverse()
+            .join("") <=
+            new Date(filterConfig.dateTo)
+              .toLocaleDateString()
+              .split(".")
+              .reverse()
+              .join("")
+      )
+      .filter(
+        (tweet) =>
+          !filterConfig.timeFrom ||
+          new Date(tweet.createdAt).toLocaleTimeString() >=
+            filterConfig.timeFrom
+      ) //поиск по дате "до"
+      .filter(
+        (tweet) =>
+          !filterConfig.timeTo ||
+          new Date(tweet.createdAt).toLocaleTimeString() <= filterConfig.timeTo
+      )
+      .slice(skip, skip + top)
+      .sort((a, b) => b.createdAt - a.createdAt);
+
+    return filterConfig.hashtag
+      ? filterConfig.hashtag
+          .split(" ")
+          .reduce(
+            (tweets, elem) =>
+              tweets.filter((tweet) => tweet.text.includes(elem)),
+            tweetsFiltered
+          )
+      : tweetsFiltered;
   }
   add(text) {
     if (typeof text !== "string" || text.length > Tweet.maxTextLength)
@@ -374,4 +430,112 @@ class TweetCollection {
     return (this.tweets = []);
   }
 }
+const tweetsCol = new TweetCollection(tweets);
 
+console.log(tweetsCol.getPage(0, 10, { hashtag: "#js" }));
+
+class HeaderView {
+  constructor(containerId) {
+    this.container = document.getElementById(containerId);
+  }
+
+  display(name) {
+    this.container.nextElementSibling.remove();
+    this.container.style.visibility = "visible";
+    this.container.lastElementChild.previousElementSibling.innerHTML = name;
+  }
+}
+
+class TweetCollectionView {
+  constructor(containerId) {
+    this.container = document.getElementById(containerId);
+  }
+
+  #monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  
+  display(tweets) {
+    let tweetsHtml = tweets.map((tweet)=>`<div class="main__tweet" id="${tweet.id}">
+    <div class="tweet__container">
+      <div class="user-icon__container">
+        <div class="user-icon"></div>
+       </div>
+   <div class="tweet__text">
+    <div class="tweet__text_header">
+      <span class="text__header_user-name">${tweet.author}</span>
+      <img src="/img/Dot.svg" />
+      <div class="text__header_date">
+        <span class="text__header_date-month">${tweet.createdAt.getDate()} ${
+      this.#monthNames[tweet.createdAt.getMonth()]
+    }</span>
+        <span class="text__header_date-time">${tweet.createdAt.getHours()}:${
+      String(tweet.createdAt.getMinutes()).length > 1
+        ? tweet.createdAt.getMinutes()
+        : tweet.createdAt.getMinutes() + "0"
+    }</span>
+      </div>
+    </div>
+    <div class="tweet__text_main">
+      ${tweet.text}
+    </div>
+    <div class="tweet__text_footer">
+      <svg class="tweet__message_icon">
+        <use xlink:href="#message"></use>
+      </svg>
+  
+      <span class="tweet__message_count">${tweet.comments.length}</span>
+    </div>
+  </div>
+  </div>
+  </div>`)
+    tweetsHtml.map((tweet) =>
+      this.container.insertAdjacentHTML("beforeend", tweet)
+    );
+  }
+}
+
+class FilterView {
+  constructor(containerName) {
+ this.container = document.forms[containerName];
+  }
+
+  display(filterConfig = {}) {
+    return (filterConfig = {
+      author:
+        `${this.container.elements.author.value}` || "",
+      dateFrom:
+        `${this.container.elements.dateFrom.value}` || "",
+      dateTo:
+        `${this.container.elements.dateTo.value}` || "",
+      timeFrom:
+        `${this.container.elements.timeFrom.value}` || "",
+      timeTo:
+        `${this.container.elements.timeTo.value}` || "",
+      text:
+        `${this.container.elements.text.value}` ||
+        "",
+      hashtag: `${this.container.hashtags.value}`,
+    });
+  }
+}
+
+
+const inputs = new FilterView("filters");
+
+const header = new HeaderView("header__user");
+
+
+const tweetsColView = new TweetCollectionView("tweets");
+tweetsColView.display(tweetsCol.getPage(0, 10, inputs.display()));

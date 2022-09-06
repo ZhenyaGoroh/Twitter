@@ -29,10 +29,11 @@
       </symbol>
       <!-- breadcrumbs-icon -->
       <symbol id="breadcrumbs-icon" viewBox="0 0 23 20">
-        <path d="M5.80988 6H17.0423L11.4261 15L5.80988 6Z" fill="#858585"/>
+        <path d="M5.80988 6H17.0423L11.4261 15L5.80988 6Z" fill="#858585" />
       </symbol>
     </svg>
     <!-- -----------------HEADER------------------------ -->
+    <div class="wrapper">
     <header>
       <div class="container header__container">
         <a href="#" class="header__logo-link"
@@ -41,7 +42,12 @@
         <div class="header__breadcrumbs">
           <span>Home</span>
         </div>
-        <button class="primary-btn header__btn">Log in</button>
+        <div id="header__user">
+          <div class="user-icon"></div>
+          <span class="user-name">Zhenya</span>
+          <button class="logout-btn header-btn" onclick="l">Log out</button>
+        </div>
+        <button class="primary-btn header__btn" id="header-btn" onclick="header.display();">Log in</button>
       </div>
     </header>
 
@@ -65,71 +71,16 @@
           </div>
         </div>
         <!-- --------------------TWEETS--------------------------- -->
-        <div class="main__tweet">
-          <div class="tweet__container">
-            <div class="user-icon__container">
-              <div class="user-icon"></div>
-            </div>
-            <div class="tweet__text">
-              <div class="tweet__text_header">
-                <span class="text__header_user-name">Zhenya Goroh</span>
-                <img src="/img/Dot.svg" />
-                <div class="text__header_date">
-                  <span class="text__header_date-month">31 July</span>
-                  <span class="text__header_date-time">15:00</span>
-                </div>
-              </div>
-              <div class="tweet__text_main">
-                Студия Артемия Лебедева установила на въезде в Териберку стелу
-                «в форме хвоста только что показавшегося из воды кита».
-              </div>
-              <div class="tweet__text_footer">
-                <svg class="tweet__message_icon">
-                  <use xlink:href="#message"></use>
-                </svg>
-
-                <span class="tweet__message_count">0</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="main__tweet">
-          <div class="tweet__container">
-            <div class="user-icon__container">
-              <div class="user-icon"></div>
-            </div>
-            <div class="tweet__text">
-              <div class="tweet__text_header">
-                <span class="text__header_user-name">Zhenya Goroh</span>
-                <img src="/img/Dot.svg" />
-                <div class="text__header_date">
-                  <span class="text__header_date-month">31 July</span>
-                  <span class="text__header_date-time">15:00</span>
-                </div>
-              </div>
-              <div class="tweet__text_main">
-                <span class="hashtag">#HashTag</span> Студия Артемия Лебедева
-                установила на въезде в Териберку стелу «в форме хвоста только
-                что показавшегося из воды кита».
-              </div>
-              <div class="tweet__text_footer">
-                <svg class="tweet__message_icon">
-                  <use xlink:href="#message"></use>
-                </svg>
-                <span class="tweet__message_count">0</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div class="tweets" id="tweets"></div>
         <div class="tweets__load-more-btn">
           <button class="primary-btn load-more-btn">Load more</button>
         </div>
       </main>
       <!-- -------------------------FILTERS----------------------------------- -->
       <aside>
-        <div class="filters">
+        <form name="filters" action="#" onsubmit="return false" class="filters" >
           <div class="filters__title"><h2>Filters</h2></div>
-          <div class="filters__container">
+          <div class="filters__container" id="filters">
             <div class="search-by-author">
               <span class="search-by-author__subtitle"
                 >Search tweets by author name</span
@@ -138,6 +89,7 @@
                 type="Select"
                 placeholder="Select author"
                 class="filters-input search-author-input"
+                name="author"
               />
             </div>
             <div class="search-by-date-time">
@@ -147,13 +99,15 @@
               <div class="search-by-date">
                 <span class="search-by-date__from">from</span>
                 <input
-                  type="text"
+                name="dateFrom"
+                  type="date"
                   class="filters-input search-by-date__from_input"
                   placeholder="Enter start date"
                 />
                 <span class="search-by-date__to">to</span>
                 <input
-                  type="text"
+                name="dateTo"
+                  type="date"
                   class="filters-input search-by-date__to_input"
                   placeholder="Enter end date"
                 />
@@ -161,13 +115,15 @@
               <div class="search-by-time">
                 <span class="search-by-time__from">from</span>
                 <input
-                  type="text"
+                name="timeFrom"
+                  type="time"
                   class="filters-input search-by-time__from_input"
                   placeholder="Enter start time"
                 />
                 <span class="search-by-time__to">to</span>
                 <input
-                  type="text"
+                name="timeTo"
+                  type="time"
                   class="filters-input search-by-time__to_input"
                   placeholder="Enter end time"
                 />
@@ -179,6 +135,7 @@
                   >Search tweets by text</span
                 >
                 <input
+                name="text"
                   type="text"
                   placeholder="Enter search text"
                   class="filters-input search-by-text__input"
@@ -189,6 +146,7 @@
                   >Search tweets by #tags</span
                 >
                 <input
+                name="hashtags"
                   type="text"
                   class="filters-input search-by-tags__input"
                   placeholder="Enter search #tags"
@@ -197,10 +155,18 @@
             </div>
             <div class="filters__btn">
               <button class="clear-btn">clear</button>
-              <button class="primary-btn">SEARCH</button>
+              <button
+                class="primary-btn"
+                id="search-btn"
+                onclick="document.getElementById(`tweets`).innerHTML = ``;
+                tweetsColView.display(tweetsCol.getPage(0, 10, inputs.display()))"
+                
+              >
+                SEARCH
+              </button>
             </div>
           </div>
-        </div>
+        </form>
       </aside>
     </div>
     <!-- -----------------------------FOOTER---------------------------- -->
@@ -210,8 +176,8 @@
       <a href="mailto:zhenyagoroh@gmail.com">zhenyagoroh@gmail.com</a>
       <span>1 Aug 2022</span>
     </footer>
+  </div>
     <!-- ============================= SCRIPTS ============================= -->
-    <script type="module" src="/Script/task1.js"></script>
-    <script type="module" src="/Script/task2.js"></script>
+    <script src="/Script/Scripts.js"></script>
   </body>
 </html>
