@@ -206,7 +206,7 @@ const tweets = [
   {
     id: "18",
     text: "Python",
-    createdAt: new Date(),
+    createdAt: new Date("2022-03-09T23:00:05"),
     author: "Mihnosha",
     comments: [
       {
@@ -301,17 +301,16 @@ class Tweet {
 
 class TweetCollection {
   constructor(tweets) {
-    this.tweets = tweets;
+    this.tweets = tweets.sort((a, b) => b.createdAt - a.createdAt);
   }
   //private mothods
-  _user = "";
-
-  get user() {
-    return this._user;
-  }
+  _user;
 
   set user(user) {
     this._user = user;
+  }
+  get user() {
+    return this._user;
   }
 
   // get tweet by id
@@ -399,6 +398,7 @@ class TweetCollection {
     };
     if (Tweet.validate(tweet)) {
       this.tweets.push(tweet);
+      this.tweets.sort((a, b) => b.createdAt - a.createdAt);
       return true;
     }
 
@@ -464,7 +464,8 @@ class HeaderView {
   display(name) {
     this.container.nextElementSibling.remove();
     this.container.style.visibility = "visible";
-    this.container.lastElementChild.previousElementSibling.innerHTML = name;
+    this.container.lastElementChild.previousElementSibling.innerHTML =
+      tweetsCol.user;
   }
 }
 
@@ -519,7 +520,7 @@ class TweetCollectionView {
       <svg class="tweet__message_icon">
         <use xlink:href="#message"></use>
       </svg>
-  
+
       <span class="tweet__message_count">${tweet.comments.length}</span>
     </div>
   </div>
@@ -612,8 +613,8 @@ class TweetView {
     <div class="main__comments">
       <span class="comments__title">Comments</span>
       <div class="comments" id="comments">
-        
-      </div>  
+
+      </div>
       <div class="your-comment">
         <div class="your-comment__title">Your comment</div>
         <div class="your-comment__input">
@@ -670,15 +671,39 @@ class TweetView {
           "beforeend",
           `<div style = "font-size: 1.4rem">Похоже, что никто еще не прокоментировал этот твит, будь первым!</div>`
         );
-    };
+    }
 
-    document.getElementById("header__breadcrumbs").insertAdjacentHTML("beforeend",`<svg class="header__breadcrumbs-icon">
+    document.getElementById("header__breadcrumbs").insertAdjacentHTML(
+      "beforeend",
+      `<svg class="header__breadcrumbs-icon">
     <use xlink:href="#breadcrumbs-icon"></use>
   </svg>
-  <span class="header__breadcrumbs_tweet">Tweet</span>`)
-  
+  <span class="header__breadcrumbs_tweet">Tweet</span>`
+    );
   }
-  
+}
+
+// set user
+function setCurrentUser(user) {
+  return (tweetsCol.user = user);
+}
+setCurrentUser("Петров Петр");
+
+function addTweet(text) {
+  tweetsCol.add(text);
+}
+addTweet("addTweet");
+
+function editTweet(id, text) {
+  tweetsCol.edit(id, text);
+}
+editTweet(2, "editTweet");
+function removeTweet(id) {
+  tweetsCol.remove(id);
+}
+// removeTweet(2);
+function getFeed(skip=0, top=10, filterConfig={}) {
+  return tweetsCol.getPage(skip, top, filterConfig);
 }
 
 const tweetView = new TweetView("main__container");
@@ -688,4 +713,4 @@ const inputs = new FilterView("filters");
 const header = new HeaderView("header__user");
 
 const tweetsColView = new TweetCollectionView("tweets");
-tweetsColView.display(tweetsCol.getPage(0, 10, inputs.display()));
+tweetsColView.display(getFeed(0,10,{}));
