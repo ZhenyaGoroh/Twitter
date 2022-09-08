@@ -33,6 +33,30 @@ const tweets = [
       {
         id: "21",
         text: "Хорошо, а у тебя?",
+        createdAt: new Date("2022-12-12T23:00:05"),
+        author: "Иванов Иван",
+      },
+      {
+        id: "21",
+        text: "Хорошо, а у тебя?",
+        createdAt: new Date("2022-10-10T23:00:05"),
+        author: "Иванов Иван",
+      },
+      {
+        id: "21",
+        text: "Хорошо, а у тебя?",
+        createdAt: new Date("2022-03-09T23:00:05"),
+        author: "Иванов Иван",
+      },
+      {
+        id: "21",
+        text: "Хорошо, а у тебя?",
+        createdAt: new Date("2022-03-09T23:00:05"),
+        author: "Иванов Иван",
+      },
+      {
+        id: "21",
+        text: "Хорошо, а у тебя?",
         createdAt: new Date("2022-03-09T23:00:05"),
         author: "Иванов Иван",
       },
@@ -291,8 +315,8 @@ class TweetCollection {
   }
 
   // get tweet by id
-  #get(id) {
-    return tweets.find((tweet) => tweet.id === id);
+  static get(id) {
+    return tweets.find((tweet) => tweet.id == id);
   }
 
   //public methods
@@ -385,17 +409,17 @@ class TweetCollection {
     if (
       typeof text !== "string" ||
       text.length > 280 ||
-      this.#get(id).author !== this.user
+      TweetCollection.get(id).author !== this.user
     )
       return false;
 
-    this.#get(id).text = text;
+    TweetCollection.get(id).text = text;
     return true;
   }
 
   remove(id) {
-    if (this.#get(id).author !== this.user) return false;
-    tweets.splice(tweets.indexOf(this.#get(id)), 1);
+    if (TweetCollection.get(id).author !== this.user) return false;
+    tweets.splice(tweets.indexOf(TweetCollection.get(id)), 1);
     return true;
   }
 
@@ -410,7 +434,7 @@ class TweetCollection {
       author: this.user,
     };
     if (Comment.validate(comment)) {
-      this.#get(id).comments.push(new Comment(comment));
+      TweetCollection.get(id).comments.push(new Comment(comment));
       return true;
     }
     return false;
@@ -431,8 +455,6 @@ class TweetCollection {
   }
 }
 const tweetsCol = new TweetCollection(tweets);
-
-console.log(tweetsCol.getPage(0, 10, { hashtag: "#js" }));
 
 class HeaderView {
   constructor(containerId) {
@@ -465,9 +487,12 @@ class TweetCollectionView {
     "November",
     "December",
   ];
-  
+
   display(tweets) {
-    let tweetsHtml = tweets.map((tweet)=>`<div class="main__tweet" id="${tweet.id}">
+    let tweetsHtml = tweets.map(
+      (tweet) => `<div class="main__tweet" id="${
+        tweet.id
+      }" onclick="tweetView.display(TweetCollection.get(${String(tweet.id)}))">
     <div class="tweet__container">
       <div class="user-icon__container">
         <div class="user-icon"></div>
@@ -478,13 +503,13 @@ class TweetCollectionView {
       <img src="/img/Dot.svg" />
       <div class="text__header_date">
         <span class="text__header_date-month">${tweet.createdAt.getDate()} ${
-      this.#monthNames[tweet.createdAt.getMonth()]
-    }</span>
+        this.#monthNames[tweet.createdAt.getMonth()]
+      }</span>
         <span class="text__header_date-time">${tweet.createdAt.getHours()}:${
-      String(tweet.createdAt.getMinutes()).length > 1
-        ? tweet.createdAt.getMinutes()
-        : tweet.createdAt.getMinutes() + "0"
-    }</span>
+        String(tweet.createdAt.getMinutes()).length > 1
+          ? tweet.createdAt.getMinutes()
+          : tweet.createdAt.getMinutes() + "0"
+      }</span>
       </div>
     </div>
     <div class="tweet__text_main">
@@ -499,7 +524,8 @@ class TweetCollectionView {
     </div>
   </div>
   </div>
-  </div>`)
+  </div>`
+    );
     tweetsHtml.map((tweet) =>
       this.container.insertAdjacentHTML("beforeend", tweet)
     );
@@ -508,34 +534,158 @@ class TweetCollectionView {
 
 class FilterView {
   constructor(containerName) {
- this.container = document.forms[containerName];
+    this.container = document.forms[containerName];
   }
 
   display(filterConfig = {}) {
     return (filterConfig = {
-      author:
-        `${this.container.elements.author.value}` || "",
-      dateFrom:
-        `${this.container.elements.dateFrom.value}` || "",
-      dateTo:
-        `${this.container.elements.dateTo.value}` || "",
-      timeFrom:
-        `${this.container.elements.timeFrom.value}` || "",
-      timeTo:
-        `${this.container.elements.timeTo.value}` || "",
-      text:
-        `${this.container.elements.text.value}` ||
-        "",
+      author: `${this.container.elements.author.value}` || "",
+      dateFrom: `${this.container.elements.dateFrom.value}` || "",
+      dateTo: `${this.container.elements.dateTo.value}` || "",
+      timeFrom: `${this.container.elements.timeFrom.value}` || "",
+      timeTo: `${this.container.elements.timeTo.value}` || "",
+      text: `${this.container.elements.text.value}` || "",
       hashtag: `${this.container.hashtags.value}`,
     });
   }
 }
 
+class TweetView {
+  constructor(containerId) {
+    this.container = document.getElementById(containerId);
+  }
+  #monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  display(tweet) {
+    this.container.insertAdjacentHTML(
+      "beforebegin",
+      `<div class="main__comments_container main__container">
+    <!-- ======================TWEET========================= -->
+    <div class="main__tweet">
+      <div class="tweet__container">
+        <div class="user-icon__container">
+          <div class="user-icon"></div>
+        </div>
+        <div class="tweet__text">
+          <div class="tweet__text_header">
+            <span class="text__header_user-name">${tweet.author}</span>
+            <div class="text__header_dot"><img src="/img/Dot.svg" /></div>
+            <div class="text__header_date">
+              <span class="text__header_date-month">${tweet.createdAt.getDate()} ${
+        this.#monthNames[tweet.createdAt.getMonth()]
+      }</span>
+              <span class="text__header_date-time">${tweet.createdAt.getHours()}:${
+        String(tweet.createdAt.getMinutes()).length > 1
+          ? tweet.createdAt.getMinutes()
+          : tweet.createdAt.getMinutes() + "0"
+      }</span>
+            </div>
+          </div>
+          <div class="tweet__text_main">
+            ${tweet.text}
+          </div>
+          <div class="tweet__text_footer">
+            <svg class="tweet__message_icon">
+              <use xlink:href="#message"></use>
+            </svg>
+
+            <span class="tweet__message_count">${tweet.comments.length}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ===================COMMENTS==================== -->
+
+    <div class="main__comments">
+      <span class="comments__title">Comments</span>
+      <div class="comments" id="comments">
+        
+      </div>  
+      <div class="your-comment">
+        <div class="your-comment__title">Your comment</div>
+        <div class="your-comment__input">
+          <input
+            type="text"
+            class="filters-input your-comment__input-field"
+            placeholder="Enter your comment"
+          />
+          <button class="primary-btn your-comment__input_add-btn">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>`
+    );
+    this.container.remove();
+    if (tweet.comments.length > 0) {
+      let comments = tweet.comments
+        .sort((a, b) => b.createdAt - a.createdAt)
+        .map(
+          (comment) => `    <div class="comment__container">
+  <div class="user-icon__container">
+    <div class="user-icon"></div>
+  </div>
+  <div class="comment__text">
+    <div class="comment__text_header">
+      <span class="text__header_user-name">${comment.author}</span>
+      <img src="/img/Dot.svg" />
+      <div class="text__header_date">
+        <span class="text__header_date-month">${comment.createdAt.getDate()} ${
+            this.#monthNames[comment.createdAt.getMonth()]
+          }</span>
+        <span class="text__header_date-time">${comment.createdAt.getHours()}:${
+            String(comment.createdAt.getMinutes()).length > 1
+              ? comment.createdAt.getMinutes()
+              : comment.createdAt.getMinutes() + "0"
+          }</span>
+      </div>
+    </div>
+    <div class="comment__text_main">
+      ${comment.text}
+    </div>
+  </div>
+</div>`
+        );
+      comments.map((comment) =>
+        document
+          .getElementById("comments")
+          .insertAdjacentHTML("beforeend", comment)
+      );
+    } else {
+      document
+        .getElementById("comments")
+        .insertAdjacentHTML(
+          "beforeend",
+          `<div style = "font-size: 1.4rem">Похоже, что никто еще не прокоментировал этот твит, будь первым!</div>`
+        );
+    };
+
+    document.getElementById("header__breadcrumbs").insertAdjacentHTML("beforeend",`<svg class="header__breadcrumbs-icon">
+    <use xlink:href="#breadcrumbs-icon"></use>
+  </svg>
+  <span class="header__breadcrumbs_tweet">Tweet</span>`)
+  
+  }
+  
+}
+
+const tweetView = new TweetView("main__container");
 
 const inputs = new FilterView("filters");
 
 const header = new HeaderView("header__user");
-
 
 const tweetsColView = new TweetCollectionView("tweets");
 tweetsColView.display(tweetsCol.getPage(0, 10, inputs.display()));
