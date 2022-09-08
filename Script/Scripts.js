@@ -128,6 +128,100 @@ const tweets = [
     comments: [],
   },
   {
+    id: "9",
+    text: "Если смогу, я сделаю это. Конец истории.",
+    createdAt: new Date("2022-03-09T23:40:44"),
+    author: "Женя",
+    comments: [],
+  },{
+    id: "9",
+    text: "Если смогу, я сделаю это. Конец истории.",
+    createdAt: new Date("2022-03-09T23:40:44"),
+    author: "Женя",
+    comments: [],
+  },{
+    id: "9",
+    text: "Если смогу, я сделаю это. Конец истории.",
+    createdAt: new Date("2022-03-09T23:40:44"),
+    author: "Женя",
+    comments: [],
+  },{
+    id: "9",
+    text: "Если смогу, я сделаю это. Конец истории.",
+    createdAt: new Date("2022-03-09T23:40:44"),
+    author: "Женя",
+    comments: [],
+  },
+  {
+    id: "9",
+    text: "Если смогу, я сделаю это. Конец истории.",
+    createdAt: new Date("2022-03-09T23:40:44"),
+    author: "Женя",
+    comments: [],
+  },{
+    id: "9",
+    text: "Если смогу, я сделаю это. Конец истории.",
+    createdAt: new Date("2022-03-09T23:40:44"),
+    author: "Женя",
+    comments: [],
+  },{
+    id: "9",
+    text: "Если смогу, я сделаю это. Конец истории.",
+    createdAt: new Date("2022-03-09T23:40:44"),
+    author: "Женя",
+    comments: [],
+  },{
+    id: "9",
+    text: "Если смогу, я сделаю это. Конец истории.",
+    createdAt: new Date("2022-03-09T23:40:44"),
+    author: "Женя",
+    comments: [],
+  },
+  {
+    id: "9",
+    text: "Если смогу, я сделаю это. Конец истории.",
+    createdAt: new Date("2022-03-09T23:40:44"),
+    author: "Женя",
+    comments: [],
+  },{
+    id: "9",
+    text: "Если смогу, я сделаю это. Конец истории.",
+    createdAt: new Date("2022-03-09T23:40:44"),
+    author: "Женя",
+    comments: [],
+  },{
+    id: "9",
+    text: "Если смогу, я сделаю это. Конец истории.",
+    createdAt: new Date("2022-03-09T23:40:44"),
+    author: "Женя",
+    comments: [],
+  },{
+    id: "9",
+    text: "Если смогу, я сделаю это. Конец истории.",
+    createdAt: new Date("2022-03-09T23:40:44"),
+    author: "Женя",
+    comments: [],
+  },
+  {
+    id: "9",
+    text: "Если смогу, я сделаю это. Конец истории.",
+    createdAt: new Date("2022-03-09T23:40:44"),
+    author: "Женя",
+    comments: [],
+  },{
+    id: "9",
+    text: "Если смогу, я сделаю это. Конец истории.",
+    createdAt: new Date("2022-03-09T23:40:44"),
+    author: "Женя",
+    comments: [],
+  },{
+    id: "9",
+    text: "Если смогу, я сделаю это. Конец истории.",
+    createdAt: new Date("2022-03-09T23:40:44"),
+    author: "Женя",
+    comments: [],
+  },
+  {
     id: "10",
     text: "Если смогу, я сделаю это. Конец истории.",
     createdAt: new Date("2022-03-09T23:52:00"),
@@ -231,6 +325,7 @@ const tweets = [
     author: "Zhenya",
     comments: [],
   },
+  
 ];
 
 class Comment {
@@ -488,6 +583,7 @@ class TweetCollectionView {
     "November",
     "December",
   ];
+  
 
   display(tweets) {
     let tweetsHtml = tweets.map(
@@ -692,7 +788,6 @@ setCurrentUser("Петров Петр");
 function addTweet(text) {
   tweetsCol.add(text);
 }
-addTweet("addTweet");
 
 function editTweet(id, text) {
   tweetsCol.edit(id, text);
@@ -703,8 +798,19 @@ function removeTweet(id) {
 }
 // removeTweet(2);
 function getFeed(skip=0, top=10, filterConfig={}) {
+  
   return tweetsCol.getPage(skip, top, filterConfig);
 }
+
+
+function paginationSkip (){
+  let skip = 0;
+  return function(){
+    return skip+=10;
+  }
+}
+let loadMoreSkip = paginationSkip();
+
 
 const tweetView = new TweetView("main__container");
 

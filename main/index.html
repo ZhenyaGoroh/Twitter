@@ -82,17 +82,24 @@
                   type="text"
                   class="tweet__header_input"
                   placeholder="What's happening?"
+                  id="new-tweet-text"
+                  
                 />
               </div>
               <div class="new-tweet__footer">
-                <button class="primary-btn">Tell</button>
+                <button class="primary-btn" onclick="addTweet(document.getElementById(`new-tweet-text`).value);document.getElementById(`tweets`).innerHTML = ``;tweetsColView.display(getFeed(0,10,{}));">Tell</button>
               </div>
             </div>
             <!-- --------------------TWEETS--------------------------- -->
             <div id="tweets-wrapper">
               <div class="tweets" id="tweets"></div>
               <div class="tweets__load-more-btn">
-                <button class="primary-btn load-more-btn">Load more</button>
+                <button
+                  class="primary-btn load-more-btn"
+                  onclick="tweetsColView.display(getFeed(loadMoreSkip(),10,inputs.display()))"
+                >
+                  Load more
+                </button>
               </div>
             </div>
           </main>
