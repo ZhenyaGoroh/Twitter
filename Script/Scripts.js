@@ -133,19 +133,8 @@ const tweets = [
     createdAt: new Date("2022-03-09T23:40:44"),
     author: "Женя",
     comments: [],
-  },{
-    id: "9",
-    text: "Если смогу, я сделаю это. Конец истории.",
-    createdAt: new Date("2022-03-09T23:40:44"),
-    author: "Женя",
-    comments: [],
-  },{
-    id: "9",
-    text: "Если смогу, я сделаю это. Конец истории.",
-    createdAt: new Date("2022-03-09T23:40:44"),
-    author: "Женя",
-    comments: [],
-  },{
+  },
+  {
     id: "9",
     text: "Если смогу, я сделаю это. Конец истории.",
     createdAt: new Date("2022-03-09T23:40:44"),
@@ -158,19 +147,8 @@ const tweets = [
     createdAt: new Date("2022-03-09T23:40:44"),
     author: "Женя",
     comments: [],
-  },{
-    id: "9",
-    text: "Если смогу, я сделаю это. Конец истории.",
-    createdAt: new Date("2022-03-09T23:40:44"),
-    author: "Женя",
-    comments: [],
-  },{
-    id: "9",
-    text: "Если смогу, я сделаю это. Конец истории.",
-    createdAt: new Date("2022-03-09T23:40:44"),
-    author: "Женя",
-    comments: [],
-  },{
+  },
+  {
     id: "9",
     text: "Если смогу, я сделаю это. Конец истории.",
     createdAt: new Date("2022-03-09T23:40:44"),
@@ -183,19 +161,8 @@ const tweets = [
     createdAt: new Date("2022-03-09T23:40:44"),
     author: "Женя",
     comments: [],
-  },{
-    id: "9",
-    text: "Если смогу, я сделаю это. Конец истории.",
-    createdAt: new Date("2022-03-09T23:40:44"),
-    author: "Женя",
-    comments: [],
-  },{
-    id: "9",
-    text: "Если смогу, я сделаю это. Конец истории.",
-    createdAt: new Date("2022-03-09T23:40:44"),
-    author: "Женя",
-    comments: [],
-  },{
+  },
+  {
     id: "9",
     text: "Если смогу, я сделаю это. Конец истории.",
     createdAt: new Date("2022-03-09T23:40:44"),
@@ -208,13 +175,57 @@ const tweets = [
     createdAt: new Date("2022-03-09T23:40:44"),
     author: "Женя",
     comments: [],
-  },{
+  },
+  {
     id: "9",
     text: "Если смогу, я сделаю это. Конец истории.",
     createdAt: new Date("2022-03-09T23:40:44"),
     author: "Женя",
     comments: [],
-  },{
+  },
+  {
+    id: "9",
+    text: "Если смогу, я сделаю это. Конец истории.",
+    createdAt: new Date("2022-03-09T23:40:44"),
+    author: "Женя",
+    comments: [],
+  },
+  {
+    id: "9",
+    text: "Если смогу, я сделаю это. Конец истории.",
+    createdAt: new Date("2022-03-09T23:40:44"),
+    author: "Женя",
+    comments: [],
+  },
+  {
+    id: "9",
+    text: "Если смогу, я сделаю это. Конец истории.",
+    createdAt: new Date("2022-03-09T23:40:44"),
+    author: "Женя",
+    comments: [],
+  },
+  {
+    id: "9",
+    text: "Если смогу, я сделаю это. Конец истории.",
+    createdAt: new Date("2022-03-09T23:40:44"),
+    author: "Женя",
+    comments: [],
+  },
+  {
+    id: "9",
+    text: "Если смогу, я сделаю это. Конец истории.",
+    createdAt: new Date("2022-03-09T23:40:44"),
+    author: "Женя",
+    comments: [],
+  },
+  {
+    id: "9",
+    text: "Если смогу, я сделаю это. Конец истории.",
+    createdAt: new Date("2022-03-09T23:40:44"),
+    author: "Женя",
+    comments: [],
+  },
+  {
     id: "9",
     text: "Если смогу, я сделаю это. Конец истории.",
     createdAt: new Date("2022-03-09T23:40:44"),
@@ -325,8 +336,10 @@ const tweets = [
     author: "Zhenya",
     comments: [],
   },
-  
 ];
+
+
+
 
 class Comment {
   constructor(comment) {
@@ -530,6 +543,7 @@ class TweetCollection {
     };
     if (Comment.validate(comment)) {
       TweetCollection.get(id).comments.push(new Comment(comment));
+      
       return true;
     }
     return false;
@@ -583,7 +597,6 @@ class TweetCollectionView {
     "November",
     "December",
   ];
-  
 
   display(tweets) {
     let tweetsHtml = tweets.map(
@@ -667,9 +680,10 @@ class TweetView {
   ];
 
   display(tweet) {
+    this.container.nextElementSibling.innerHTML = "";
     this.container.insertAdjacentHTML(
-      "beforebegin",
-      `<div class="main__comments_container main__container">
+      "afterbegin",
+      `<div class="main__comments_container main__container" id="comments-container">
     <!-- ======================TWEET========================= -->
     <div class="main__tweet">
       <div class="tweet__container">
@@ -718,14 +732,16 @@ class TweetView {
             type="text"
             class="filters-input your-comment__input-field"
             placeholder="Enter your comment"
+            id = "new-comment-text"
+            
           />
-          <button class="primary-btn your-comment__input_add-btn">Add</button>
+          <button class="primary-btn your-comment__input_add-btn" onclick = "addComment(${tweet.id})")>Add</button>
         </div>
       </div>
     </div>
   </div>`
     );
-    this.container.remove();
+    // this.container.innerHTML = "";
     if (tweet.comments.length > 0) {
       let comments = tweet.comments
         .sort((a, b) => b.createdAt - a.createdAt)
@@ -797,26 +813,32 @@ function removeTweet(id) {
   tweetsCol.remove(id);
 }
 // removeTweet(2);
-function getFeed(skip=0, top=10, filterConfig={}) {
-  
+function getFeed(skip = 0, top = 10, filterConfig = {}) {
   return tweetsCol.getPage(skip, top, filterConfig);
 }
 
-
-function paginationSkip (){
+function paginationSkip() {
   let skip = 0;
-  return function(){
-    return skip+=10;
-  }
+  return function () {
+    return (skip += 10);
+  };
 }
 let loadMoreSkip = paginationSkip();
 
+const tweetView = new TweetView("tweetView-container");
 
-const tweetView = new TweetView("main__container");
+function addComment(id) {
+  tweetsCol.addComment(id, document.getElementById("new-comment-text").value);
+  document.getElementById("tweetView-container").innerHTML="";
+  tweetView.display(TweetCollection.get(id));
+  
+}
+
+
 
 const inputs = new FilterView("filters");
 
 const header = new HeaderView("header__user");
 
 const tweetsColView = new TweetCollectionView("tweets");
-tweetsColView.display(getFeed(0,10,{}));
+tweetsColView.display(getFeed(0, 10, {}));
